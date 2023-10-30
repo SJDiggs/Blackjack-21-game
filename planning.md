@@ -5,10 +5,12 @@
 
 ## General rules/assumptions:
 - Turn based logic --> player response until selecting stay, dealer response until selecting stay
-- Player will win $50 if they win the round
+- Player will win $100 if they win the round
 - Player must click "Stay" to end their turn
 - Only 1 deck is in play (52 cards), no Jokers
 - There are only 4 cards selectable for each suite (i.e. 4x Aces, 4x 2's, 4x Queens, etc)
+- There will be a maximum of 7 hits available for the player and dealer
+- A player cannot leave the game once the hand is dealt
 
 
 ## (Player)
@@ -71,7 +73,7 @@
         - There should be a delay between when the dealer takes an action to simulate the dealer thinking about their options
 
     ### (Staying)
-        - The dealer will stay if the value of the 2 cards is =20 on the initial deal, and first hit.  Random integer logic will be used to determine if the dealer will take a hit on the 2nd and subsequent hits if the total of the hit is less than 20
+        - The dealer will stay if the value of the 2 cards is =20 on the initial deal, and first hit.  Random integer logic will be used to determine if the dealer will take a hit on the 2nd and subsequent hits if the total of the hit is less than 18
         - A messge will appear "Dealer:  Dealer stays..."
 
     ### (Losing to Player)
@@ -95,9 +97,9 @@
 playerTotal = card1Value + card2Value
 
 ## Calculate Initial deal for Dealer
-exectue random integer math values 1 - 11 for dealerCard1
-execute random integer math values 1 - 11 for dealerCard 2
-if dealer has 2 cards where the value of 22 (11 each) (**2 Aces scenario)
+- Exectue random integer math values 1 - 11 for dealerCard1
+- Execute random integer math values 1 - 11 for dealerCard 2
+- if dealer has 2 cards where the value of 22 (11 each) (**2 Aces scenario)
         dealer.card1Value = 1, dealer.card2Value = 11
     execute card1 match number to card visual (ex. card1 = 2, visual = 2-of-hearts.png)
      display card1 on the screen in the dealer-hand container, card-1 section
@@ -105,6 +107,28 @@ if dealer has 2 cards where the value of 22 (11 each) (**2 Aces scenario)
         display card2 on the screen in the dealer-hand container, card-2 section
     
 ## Calculate Winning Inital Hand
- if inital-hand and player hand = 21 and dealer hand less than 21
+ - If inital-hand and player hand = 21 and dealer hand less than 21
     player wins
-    
+
+## Calculate Winning hand
+ - If the dealer has 21 and the player has less than 21 the dealer will stay for all subsequent hit opportunities
+ - The winner is determined by who has the larger total of the card values
+
+##TO-DO
+1. Get visuals
+    a. Cards
+    b. Table
+
+2. Setup HTML per wireframe
+
+3. Setup CSS per high Fidelity specifications
+    a. dealer hand
+    b. message center
+    c. player hand
+    d. Buttons
+        i. Wager (20, 50, 100)
+        ii. Action (Hit, Deal, Stay, Leave)
+    e. Bet and Balance section
+
+4. Code JS
+    a. consta
