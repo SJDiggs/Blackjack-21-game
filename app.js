@@ -2,7 +2,6 @@ console.log("JS Loaded")
 // ----- Constants ----- //
 
 
-
 // ----- Variables ----- //
 
 
@@ -22,24 +21,37 @@ let deck
 let message = "Welcome"
 
 
-
-
-// ----- Cached DOM elements ----- //
-
-
-
 // ----- Event Listeners ----- //
+// "Hit button"
+document.getElementById("hit").addEventListener("click", hit)
 
+// "Stay button"
+document.getElementById("stay").addEventListener("click", stay)
 
+// "Deal button"
+document.getElementById("deal").addEventListener("click", deal)
+
+// "Leave button"
+document.getElementById("leave-game").addEventListener("click", leaveGame)
+
+// "Bet 20 button"
+document.getElementById("bet20").addEventListener("click", wager)
+
+// "Bet 20 button"
+document.getElementById("bet50").addEventListener("click", wager)
+
+// "Bet 100 button"
+document.getElementById("bet100").addEventListener("click", wager)
 
 // ----- Functions ----- //
 
 // init
-init()
+gameFlow()
 
 
-function init() {
+function gameFlow() {
     console.log("initializing game")
+    //checkBalance();  -->see if the player has enough in their account to play.  If not end game
     createDeck();
     console.log("Deck created")
     shuffleCards();
@@ -50,9 +62,11 @@ function init() {
     console.log("Hidden Card Total = " + dealerTotal)
     dealerCard();
     console.log("Dealer Initial Hand dealt")
-    playerCard();
+    initPlayerCards();
     console.log("Player Initial hand dealt")
     console.log("Player Total = " + playerTotal)
+
+
 
 }
 // This function will create the deck by using nested for loops to create the card value and suit (to be associated with the corresponding .png)  NOTE:  ForEach can be used here - icebox
@@ -121,8 +135,8 @@ function dealerCard() {
     }
 }
 // This funciton is used to populate the intial 2 cards for the ployer deck
-function playerCard () {
-    for (let i = 0; i < 2; i++) {
+function initPlayerCards () {
+    for (let i = 0; i < 2; i++) { //populate the screen with 2 cards using the for loop 
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "player-cards"> assign to cardImage variable
         let card = deck.shift() //grab the first card in the randomized deck
         cardImage.src = "./imgs/cards/" + card + ".png" // create link to the card visual
@@ -132,14 +146,56 @@ function playerCard () {
     }
 }
 
+function hit () {
+    console.log("Clicked Hit Button")
+    // Check to see if the player has 21.  If so do not let them hit/disable hit button. Mesasge =  "You already have 21, can't take a hit..."
+    // Check to see if player has over 21.  If so do not let them hit/disable hit button.  Message = "You bust..."  Determine winner or tie.
+    // Else allow player to hit
+    // if player hit puts them over 21 evaluate dealer hand and determine winner or tie
+    // it player hits and they are under 21 let dealer take their turn
+
+}
+
+function stay() {
+    console.log("Clicked Stay Button")
+    // let dealer take their turn
+    // determine win, lose, tie
+}
+
+function deal() {
+    console.log("Clicked Deal Button")
+    // only can be invoked if player has 20 or more in their account balance
+    // can only be invoked if player enters a valid wager first
+    // call gameflow() to start new round
+    // deactivate deal button untl end of game
+    
+}
+
+function leaveGame() {
+    console.log("Clicked Leave Button")
+}
+
+function wager() {
+    console.log("Clicked a wager button")
+    // icebox ---> allow for multiple clicks of wager buttons
+
+}
+
+function acctBalance() {
+    //determine if balance is being reduced via wager
+    //determine if balance is being incremented due to win
+    //determine if balance is restored due to tie
+}
+
+function messageSystem() {
+    //display appropriate message in the message-display to player
+
+}
+
 // render cards
-// calculate card total
 // winning hand
 // message system
-// account balance add/decrease
-// leave game
-// deal hand
-// hit logic
-// stay logic
-// leave game
+// wager button logic
+// action button handling
+
 
