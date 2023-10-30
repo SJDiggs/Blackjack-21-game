@@ -18,7 +18,7 @@ let dealerAces
 // Working storage to track the value of the dealers hidden card
 let hiddenCard
 let deck
-let message = "Welcome"
+let message = "Dealer: Welcome to the game..."
 
 
 // ----- Event Listeners ----- //
@@ -65,6 +65,7 @@ function gameFlow() {
     initPlayerCards();
     console.log("Player Initial hand dealt")
     console.log("Player Total = " + playerTotal)
+
 
 
 
@@ -140,7 +141,7 @@ function initPlayerCards () {
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "player-cards"> assign to cardImage variable
         let card = deck.shift() //grab the first card in the randomized deck
         cardImage.src = "./imgs/cards/" + card + ".png" // create link to the card visual
-        playerTotal += getCardValue(card); //add the total of the hidden card and the card selected
+        playerTotal += getCardValue(card); //add the total of the card and the card selected
         playerAces += aceCheck(card); //check if the card is an Ace
         document.getElementById("player-cards").append(cardImage) //target the player-cards ID and append the card image for the associated card
     }
@@ -148,8 +149,36 @@ function initPlayerCards () {
 
 function hit () {
     console.log("Clicked Hit Button")
+    if (hitMe) {
+        let cardImage = document.createElement("img") // create a new image tag for the  <div id = "player-cards"> assign to cardImage variable
+        let card = deck.shift() //grab the first card in the randomized deck
+        cardImage.src = "./imgs/cards/" + card + ".png" 
+        playerTotal += getCardValue(card);
+        playerAces += aceCheck(card); //check if the card is an Ace
+        document.getElementById("player-cards").append(cardImage) 
+        console.log("New total after hit: " + playerTotal)
+        if (playerTotal < 21) {
+            hitMe = false
+            document.getElementById("hit").disabled = false
+            return
+        }
+        if (playerTotal == 21) {
+            hitMe = false
+            document.getElementById("hit").disabled = true  //turn off hit me button
+            return 
+        }
+        if (playerAceMath(playerTotal, playerAces) > 21) { //check player sum and ace count to see if they can reduce the aces from 11 to 1 to get under 21
+            hitMe = false
+            document.getElementById("hit").disabled = true 
+        }
+
+        if (playerTotal > 21) {
+            document.getElementById("hit").disabled = true 
+        }
+        return
+    }
+
     // Check to see if the player has 21.  If so do not let them hit/disable hit button. Mesasge =  "You already have 21, can't take a hit..."
-    // Check to see if player has over 21.  If so do not let them hit/disable hit button.  Message = "You bust..."  Determine winner or tie.
     // Else allow player to hit
     // if player hit puts them over 21 evaluate dealer hand and determine winner or tie
     // it player hits and they are under 21 let dealer take their turn
@@ -192,10 +221,30 @@ function messageSystem() {
 
 }
 
-// render cards
-// winning hand
+function evaluateHand() {
+    console.log("Evaluating Hand")
+}
+// game disposition -> winner -> losing hand -> tied
 // message system
 // wager button logic
 // action button handling
 
-
+// This function will determine if the hand (player) is over 21 and has an ace in their hand. If they do, then the ace will be converted from 11 to 1
+function playerAceMath(playerTotal, playerAces) {
+    console.log("Ace Math")
+    while (playerTotal > 21 && playerAces > 0) {
+        playerTotal -= 10 // subtract the player total by 10
+        playerAces -= 1  // remove the ace
+    }
+    console.log("New Player total = " + playerTotal)
+    return playerTotal
+}
+// This function will determine if the hand (dealer) is over 21 and has an ace in their hand. If they do, then the ace will be converted from 11 to 1
+function dealerAceMath(dealerTotal, dealerAces) {
+    while (dealerTotal > 21 && dealerAces > 0) {
+        dealerTotal -= 10 // subtract the player total by 10
+        dealerAces -= 1  // remove the ace
+    }
+    console.log("Dealer Ace Math.  New Dealer total = " + dealerTotal)
+    return dealerTotal
+}

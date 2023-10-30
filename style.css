@@ -2,38 +2,71 @@
     background-color: green;
 }
 
-body {
+h1 {
+    text-align: center;
+    font-family: fantasy;
 
 }
 
 #dealer-cards img {
-    height: 120px;
-    width: 85px;
+    height: 160px;
+    width: 105px;
     margin: 5px;
 }
 
 .message-panel {
     text-align: center;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: fantasy;
     font-size: 20px;
-    color: rgb(118, 21, 41);
+    color: #000000;
 
 }
 
 #player-cards img {
-    height: 120px;
-    width: 85px;
+    height: 160px;
+    width: 105px;
     margin: 5px;
 }
 .button-panel {
     display: flex;
     border: 0 px;
-    border-style: none;
-    outline-style: none;
-    background-color: whitesmoke;
+    background-color: rgb(175, 100, 9);
+    height: 130px;
+    margin: 0 auto;
 }
-.dealer-hand {
-    justify-content: center;
+#bet20 {
+    border: 0px;
+    background-color: rgb(175, 100, 9);
+    color: rgb(175, 100, 9);
+}
+#bet50 {
+    border: 0px;
+    background-color: rgb(175, 100, 9);
+    color: rgb(175, 100, 9);
+}
+#bet100 {
+    border: 0px;
+    background-color: rgb(175, 100, 9);
+    color: rgb(175, 100, 9);
+}
+#hit {
+    border: 0px;
+    background-color: rgb(175, 100, 9);
+    color: rgb(175, 100, 9);
+}
+#deal {
+    border: 0px;
+    background-color: rgb(175, 100, 9);
+    color: rgb(175, 100, 9);
+}
+#stay {
+    border: 0px;
+    background-color: rgb(175, 100, 9);
+    color: rgb(175, 100, 9);
+}
+
+#dealer-cards img {
+    align-items: center;
 }
 
 .player-hand {
@@ -44,18 +77,26 @@ body {
     height:90px;
     width: 90px;
     margin: 0;
+    background-color: rgb(175, 100, 9);
+    color: rgb(175, 100, 9);
 }
 
 #bet20 img {
     height: 90px;
     width: 120px;
+    background-color: rgb(175, 100, 9);
+    color: rgb(175, 100, 9);
 }
 #bet50 img {
     height: 90px;
     width: 120px;
+    background-color: rgb(175, 100, 9);
+    color: rgb(175, 100, 9);
 }
 #bet100 img {
     height: 90px;
     width: 120px;
+    background-color: rgb(175, 100, 9);
+    color: rgb(175, 100, 9);
 }
 
