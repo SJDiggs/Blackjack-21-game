@@ -1,1 +1,1 @@
-# Blackjack Game ReadMe
+# Blackjack ReadMe

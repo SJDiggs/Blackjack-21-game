@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
-    <script defer = "app.js"></script>
+    <script src = "app.js" defer></script>
 </head>
 <body>
     <h1>BlackJack 21</h1>
-    <section id = "controller" class = "dealer-hand">
+    <section id = "dealer-controller" class = "dealer-hand">
         <div id = "dealer-cards">
              <img src="./imgs/cards/BACK.png">
             <img src="./imgs/cards/K-S.png">
@@ -20,34 +20,46 @@
         <p id = "display-message">
             "Display Messages here"
         </p>
-
     </section>  
-    <div id = "player-cards">
-        <img src="./imgs/cards/5-D.png">
+
+    <section id = "player-controller" class = "player-hand">
+        <div id = "player-cards">
+            <img src="./imgs/cards/5-D.png">
         <img src="./imgs/cards/10-S.png">
-    </div>
-    <div id = "status-panel"></div>
-    <div class = "button-panel">
-        <button id = "bet20">
-            <img src="./imgs/chips/chip_20.png">
-        </button>
-        <button id = "bet50">
-            <img src="./imgs/chips/chip_50.png">
-        </button>
-        <button id = "bet100">
-            <img src="./imgs/chips/chip_100.png">
-        </button>
-        <button id = "hit">
-            <img src="./imgs/buttons/hit_button.png">
-        </button>
-        <button id = "deal">
-            <img src="./imgs/buttons/deal_button.png">
-        </button>
-        <button id = "stay">
-            <img src="./imgs/buttons/stay_button.png">
-        </button>
-        <button id = "leave-game">Leave</button>
-    </div>
+        </div>
+    </section>
+
+    <section id = "stats" class = "status-panel">
+        <div id = "player-stats">
+            <p id = "current-bet"> Current Bet</p>
+            <p id = "balance"> Account Balance</p>
+        </div>
+    </section>
+
+    <section id = "interface" class = "interface-panel">
+        <div id = "status-panel"></div>
+        <div class = "button-panel">
+            <button id = "bet20">
+                <img src="./imgs/chips/chip_20.png">
+            </button>
+            <button id = "bet50">
+                <img src="./imgs/chips/chip_50.png">
+            </button>
+            <button id = "bet100">
+                <img src="./imgs/chips/chip_100.png">
+            </button>
+            <button id = "hit">
+                <img src="./imgs/buttons/hit_button.png">
+            </button>
+            <button id = "deal">
+                <img src="./imgs/buttons/deal_button.png">
+            </button>
+            <button id = "stay">
+                <img src="./imgs/buttons/stay_button.png">
+            </button>
+            <button id = "leave-game">Leave</button>
+        </div>
+    </section>
     <script> 
     </script>
 </body>

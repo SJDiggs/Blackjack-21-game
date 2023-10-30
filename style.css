@@ -32,6 +32,13 @@ body {
     outline-style: none;
     background-color: whitesmoke;
 }
+.dealer-hand {
+    justify-content: center;
+}
+
+.player-hand {
+    justify-content: center;
+}
 
 .button-panel img {
     height:90px;

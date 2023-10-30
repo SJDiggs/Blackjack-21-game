@@ -134,5 +134,16 @@ playerTotal = card1Value + card2Value
     a. constants
     b. variables
     c. functions
+        i. init
+        ii. create the deck
+        iii. shuffle the deck
+        iv. render the deck
+        v. calculate the hands
+        vi.
     e. event listeners
-    
+        i. wager button click
+        ii. hit button click
+        iii. stay button click
+        iv. deal button click
+        v. leave button click
+        
