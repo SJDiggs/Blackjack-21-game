@@ -81,18 +81,15 @@ function firstHand() {
 // This function will determine the value of a card if the card is a non-numerical card (i.e. Ace, King, Queen, Jack) and return the corresponding value of the cards
 function getCardValue(card) {
     let data = card.split("-") // isolate the card value and suit (2-D --> ["2", "D"])  
-    let cardValue = data[0] //grab the first index (i.e. 2-D would grab 2)
-    console.log("CardValue = " + cardValue)
+    let cardValue = data[0] //grab the first index (i.e. 2-D would grab 2) and assign that to cardValue
     
-    if (cardValue == "J" || cardValue == "Q" || cardValue == "K") { //convert face-cards to number 10
-        console.log("Face Card Logic")
+    if (cardValue == "J" || cardValue == "Q" || cardValue == "K") { //convert face-cards to 10
         return 10
     } 
-    if (cardValue == "A") { //convert ace to 11
-        console.log("Ace Logic")
+    if (cardValue == "A") { //convert an ace to 11
         return 11
     }
-    console.log("Not an Ace or Face Card Logic")
+
     return parseInt(cardValue) //return the numerical value of the card for all non-face-cards or aces by parsing the deck string and returning the corresponding integer
 }
 
@@ -103,10 +100,13 @@ function aceCheck(card) {
         return 0
     }
 }
-// render
-// winning
+// render cards
+// winning hand
 // message system
 // account balance add/decrease
 // leave game
 // deal hand
 // hit logic
+// stay logic
+// leave game
+
