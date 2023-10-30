@@ -9,7 +9,6 @@
 - Player must click "Stay" to end their turn
 - Only 1 deck is in play (52 cards), no Jokers
 - There are only 4 cards selectable for each suite (i.e. 4x Aces, 4x 2's, 4x Queens, etc)
-- There will be a maximum of 7 hits available for the player and dealer
 - A player cannot leave the game once the hand is dealt
 
 
@@ -146,4 +145,4 @@ playerTotal = card1Value + card2Value
         iii. stay button click
         iv. deal button click
         v. leave button click
-        
+

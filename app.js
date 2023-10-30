@@ -89,7 +89,7 @@ function shuffleCards() {
         let temp = deck[i] //temporarily store the shuffled card
             deck[i] = deck[c] //swapsthe card at index i with the card at index c to shuffle the deck.
             deck[c] = temp
-    console.log(temp)
+    //console.log(temp)
     }
 }
 
@@ -148,7 +148,7 @@ function initPlayerCards () {
 }
 
 function hit () {
-    console.log("Clicked Hit Button")
+    console.log("Clicked Hit Button.  hitMe value: " + hitMe)
     if (hitMe) {
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "player-cards"> assign to cardImage variable
         let card = deck.shift() //grab the first card in the randomized deck
@@ -158,23 +158,27 @@ function hit () {
         document.getElementById("player-cards").append(cardImage) 
         console.log("New total after hit: " + playerTotal)
         if (playerTotal < 21) {
-            hitMe = false
+            hitMe = true //needs to be evaluated to see if ace can be changed to 1
             document.getElementById("hit").disabled = false
+            //console.log("Under 21: hit button active")
             return
         }
         if (playerTotal == 21) {
             hitMe = false
             document.getElementById("hit").disabled = true  //turn off hit me button
+            //message = "Dealer: You have 21..."
             return 
         }
-        if (playerAceMath(playerTotal, playerAces) > 21) { //check player sum and ace count to see if they can reduce the aces from 11 to 1 to get under 21
-            hitMe = false
-            document.getElementById("hit").disabled = true 
-        }
-
-        if (playerTotal > 21) {
-            document.getElementById("hit").disabled = true 
-        }
+            if (playerAceMath(playerTotal, playerAces) > 21) { //check player sum and ace count to see if they can reduce the aces from 11 to 1 to get under 21
+                if (playerTotal > 21) {
+                    hitMe = false
+                    document.getElementById("hit").disabled = true 
+                    //console.log("Aces bust handling") -> send to dealer
+                } else {
+                    hitMe = true
+                    document.getElementById("hit").disabled = false
+                }
+            }
         return
     }
 
@@ -231,13 +235,12 @@ function evaluateHand() {
 
 // This function will determine if the hand (player) is over 21 and has an ace in their hand. If they do, then the ace will be converted from 11 to 1
 function playerAceMath(playerTotal, playerAces) {
-    console.log("Ace Math")
-    console.log("playerTotal = " + playerTotal + "  Player Ace Count: " + playerAces)
+    //console.log("playerTotal = " + playerTotal + "  Player Ace Count: " + playerAces)
     while (playerTotal > 21 && playerAces > 0) {
         playerTotal -= 10 // subtract the player total by 10
         playerAces -= 1  // remove the ace
     }
-    console.log("New Player total = " + playerTotal)
+    console.log("Aces. New Player total = " + playerTotal)
     return playerTotal
 }
 // This function will determine if the hand (dealer) is over 21 and has an ace in their hand. If they do, then the ace will be converted from 11 to 1
@@ -246,6 +249,6 @@ function dealerAceMath(dealerTotal, dealerAces) {
         dealerTotal -= 10 // subtract the player total by 10
         dealerAces -= 1  // remove the ace
     }
-    console.log("Dealer Ace Math.  New Dealer total = " + dealerTotal)
+    //console.log("Dealer Ace Math.  New Dealer total = " + dealerTotal)
     return dealerTotal
 }
