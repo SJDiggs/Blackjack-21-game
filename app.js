@@ -19,6 +19,7 @@ let dealerAces
 // Working storage to track the value of the dealers hidden card
 let hiddenCard
 let deck
+let message = "Welcome"
 
 
 
@@ -47,6 +48,7 @@ function init() {
     console.log("First Hand Delt")
     console.log("Hidden Card = " + hidden)
     console.log("Hidden Card Total = " + dealerTotal)
+    dealerCard();
 
 }
 // This function will create the deck by using nested for loops to create the card value and suit (to be associated with the corresponding .png)  NOTE:  ForEach can be used here - icebox
@@ -100,7 +102,23 @@ function aceCheck(card) {
         return 0
     }
 }
+
+function dealerCard() {
+    if (dealerTotal < 18) {
+        let cardImage = document.createElement("img") // create a new image tag for the  <div id = "dealer-cards"> assign to cardImage variable
+        let card = deck.pop() //grab the last card in the randomized deck
+        cardImage.src = "./imgs/cards/" + card + ".png" // create link to the card visual
+        dealerTotal += getCardValue(card); //add the total of the hidden card and the card selected
+        dealerAces += aceCheck(card); //check if the card is an Ace
+        document.getElementById("dealer-cards").append(cardImage)
+        console.log("Dealer total =" + dealerTotal)
+    } else {
+        message = "Dealer:  Dealer Stays..."
+    }
+}
+
 // render cards
+// calculate card total
 // winning hand
 // message system
 // account balance add/decrease
