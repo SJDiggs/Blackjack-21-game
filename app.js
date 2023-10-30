@@ -13,8 +13,8 @@ let accountBalance = 500
 //init value to allow the player to draw a card if the value of playerTotal is less than 21
 let hitMe = true
 // if a player or dealer has an ace it could be evaluated as either a 1 or a 10 depending on the hand
-let playerAces
-let dealerAces
+let playerAces = 0
+let dealerAces = 0
 // Working storage to track the value of the dealers hidden card
 let hiddenCard
 let deck
@@ -82,14 +82,14 @@ function createDeck () {
         }
     }
 }
-// This function will randomly shuffle/calculate the cards from the createDeck function
+// This function randomly shuffles the cards from the createDeck function using the Fisher-Yates shuffle method.
 function shuffleCards() {
     for (let i = 0; i < deck.length; i++) { //iterate through the 52 cards (deck.length)
-        let c = Math.floor(Math.random() * deck.length) //randomly select the card from the deck created
-        let temp = deck[i] //create the shuffled deck by 
-            deck[i] = deck[c]
+        let c = Math.floor(Math.random() * deck.length) //randomly index the card from the deck created
+        let temp = deck[i] //temporarily store the shuffled card
+            deck[i] = deck[c] //swapsthe card at index i with the card at index c to shuffle the deck.
             deck[c] = temp
-    //console.log(deck)
+    console.log(temp)
     }
 }
 
@@ -232,6 +232,7 @@ function evaluateHand() {
 // This function will determine if the hand (player) is over 21 and has an ace in their hand. If they do, then the ace will be converted from 11 to 1
 function playerAceMath(playerTotal, playerAces) {
     console.log("Ace Math")
+    console.log("playerTotal = " + playerTotal + "  Player Ace Count: " + playerAces)
     while (playerTotal > 21 && playerAces > 0) {
         playerTotal -= 10 // subtract the player total by 10
         playerAces -= 1  // remove the ace
