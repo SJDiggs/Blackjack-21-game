@@ -49,6 +49,10 @@ function init() {
     console.log("Hidden Card = " + hidden)
     console.log("Hidden Card Total = " + dealerTotal)
     dealerCard();
+    console.log("Dealer Initial Hand dealt")
+    playerCard();
+    console.log("Player Initial hand dealt")
+    console.log("Player Total = " + playerTotal)
 
 }
 // This function will create the deck by using nested for loops to create the card value and suit (to be associated with the corresponding .png)  NOTE:  ForEach can be used here - icebox
@@ -111,9 +115,20 @@ function dealerCard() {
         dealerTotal += getCardValue(card); //add the total of the hidden card and the card selected
         dealerAces += aceCheck(card); //check if the card is an Ace
         document.getElementById("dealer-cards").append(cardImage)
-        console.log("Dealer total =" + dealerTotal)
+        console.log("Dealer Total = " + dealerTotal)
     } else {
         message = "Dealer:  Dealer Stays..."
+    }
+}
+// This funciton is used to populate the intial 2 cards for the ployer deck
+function playerCard () {
+    for (let i = 0; i < 2; i++) {
+        let cardImage = document.createElement("img") // create a new image tag for the  <div id = "player-cards"> assign to cardImage variable
+        let card = deck.shift() //grab the first card in the randomized deck
+        cardImage.src = "./imgs/cards/" + card + ".png" // create link to the card visual
+        playerTotal += getCardValue(card); //add the total of the hidden card and the card selected
+        playerAces += aceCheck(card); //check if the card is an Ace
+        document.getElementById("player-cards").append(cardImage) //target the player-cards ID and append the card image for the associated card
     }
 }
 
