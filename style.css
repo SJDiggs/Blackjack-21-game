@@ -1,3 +1,26 @@
 *{
     background-color: green;
 }
+
+body {
+
+}
+
+#dealer-cards img {
+    height: 120px;
+    width: 85px;
+    margin: 5px;
+}
+
+#player-cards img {
+    height: 120px;
+    width: 85px;
+    margin: 5px;
+}
+
+.button-panel img {
+    height:90px;
+    width: 90px;
+    margin: 0;
+}
+
