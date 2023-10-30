@@ -12,15 +12,43 @@ body {
     margin: 5px;
 }
 
+.message-panel {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    color: rgb(118, 21, 41);
+
+}
+
 #player-cards img {
     height: 120px;
     width: 85px;
     margin: 5px;
+}
+.button-panel {
+    display: flex;
+    border: 0 px;
+    border-style: none;
+    outline-style: none;
+    background-color: whitesmoke;
 }
 
 .button-panel img {
     height:90px;
     width: 90px;
     margin: 0;
+}
+
+#bet20 img {
+    height: 90px;
+    width: 120px;
+}
+#bet50 img {
+    height: 90px;
+    width: 120px;
+}
+#bet100 img {
+    height: 90px;
+    width: 120px;
 }
 
