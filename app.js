@@ -45,8 +45,8 @@ function init() {
     console.log("Cards shuffled")
     firstHand();
     console.log("First Hand Delt")
-    console.log(hidden)
-    console.log(dealerTotal)
+    console.log("Hidden Card = " + hidden)
+    console.log("Hidden Card Total = " + dealerTotal)
 
 }
 // This function will create the deck by using nested for loops to create the card value and suit (to be associated with the corresponding .png)  NOTE:  ForEach can be used here - icebox
@@ -81,13 +81,18 @@ function firstHand() {
 // This function will determine the value of a card if the card is a non-numerical card (i.e. Ace, King, Queen, Jack) and return the corresponding value of the cards
 function getCardValue(card) {
     let data = card.split("-") // isolate the card value and suit (2-D --> ["2", "D"])  
-    let cardValue = data[0]
+    let cardValue = data[0] //grab the first index (i.e. 2-D would grab 2)
+    console.log("CardValue = " + cardValue)
+    
     if (cardValue == "J" || cardValue == "Q" || cardValue == "K") { //convert face-cards to number 10
+        console.log("Face Card Logic")
         return 10
-    }
-    if (cardValue = "A") { //convert ace to 11
+    } 
+    if (cardValue == "A") { //convert ace to 11
+        console.log("Ace Logic")
         return 11
     }
+    console.log("Not an Ace or Face Card Logic")
     return parseInt(cardValue) //return the numerical value of the card for all non-face-cards or aces by parsing the deck string and returning the corresponding integer
 }
 
