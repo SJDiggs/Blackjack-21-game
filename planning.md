@@ -131,4 +131,8 @@ playerTotal = card1Value + card2Value
     e. Bet and Balance section
 
 4. Code JS
-    a. consta
+    a. constants
+    b. variables
+    c. functions
+    e. event listeners
+    
