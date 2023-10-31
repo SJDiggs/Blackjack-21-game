@@ -10,14 +10,16 @@ let playerTotal = 0
 let dealerTotal = 0
 // Account balance total, initialized at $500
 let accountBalance = 500
-//init value to allow the player to draw a card if the value of playerTotal is less than 21
+//init value to allow the player or dealer to draw a card if they have less than 21
 let hitMe = true
+let hitdealer = true
 // if a player or dealer has an ace it could be evaluated as either a 1 or a 10 depending on the hand
 let playerAces = 0
 let dealerAces = 0
 // Working storage to track the value of the dealers hidden card
 let hiddenCard
 let deck
+
 let message = "Dealer: Welcome to the game..."
 
 
@@ -48,10 +50,10 @@ document.getElementById("bet100").addEventListener("click", wager)
 // init
 gameFlow()
 
-
 function gameFlow() {
     console.log("initializing game")
     //checkBalance();  -->see if the player has enough in their account to play.  If not end game
+    //getWager(); // 1. set up board with no cards present or remove cards if subsewuent hand 2. function for clicking chips to see if the amount wagered is less than or equal the amount they have in their account.  
     createDeck();
     console.log("Deck created")
     shuffleCards();
@@ -65,9 +67,6 @@ function gameFlow() {
     initPlayerCards();
     console.log("Player Initial hand dealt")
     console.log("Player Total = " + playerTotal)
-
-
-
 
 }
 // This function will create the deck by using nested for loops to create the card value and suit (to be associated with the corresponding .png)  NOTE:  ForEach can be used here - icebox
@@ -123,6 +122,7 @@ function aceCheck(card) {
 }
 
 function dealerCard() {
+    console.log("Dealer takes a card")
     if (dealerTotal < 18) {
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "dealer-cards"> assign to cardImage variable
         let card = deck.pop() //grab the last card in the randomized deck
@@ -130,10 +130,9 @@ function dealerCard() {
         dealerTotal += getCardValue(card); //add the total of the hidden card and the card selected
         dealerAces += aceCheck(card); //check if the card is an Ace
         document.getElementById("dealer-cards").append(cardImage)
-        console.log("Dealer Total = " + dealerTotal)
-    } else {
-        message = "Dealer:  Dealer Stays..."
+         console.log("Dealer Hits. New total = " + dealerTotal)
     }
+    return dealerTotal
 }
 // This funciton is used to populate the intial 2 cards for the ployer deck
 function initPlayerCards () {
@@ -191,8 +190,11 @@ function hit () {
 
 function stay() {
     console.log("Clicked Stay Button")
-    // let dealer take their turn
-    // determine win, lose, tie
+    while (dealerTotal < 19) {
+        dealerCard();
+    }
+    console.log("Finished dealer hit logic.  total = " + dealerTotal)
+    determineWinner(); 
 }
 
 function deal() {
@@ -225,13 +227,40 @@ function messageSystem() {
 
 }
 
-function evaluateHand() {
-    console.log("Evaluating Hand")
+function determineWinner() {
+    console.log("Determining Winner...")
+    // tie game
+    if (dealerTotal == playerTotal) {
+        message = "Dealer:  It's a tie..."
+        console.log("msg: Tie Game. dealer= " + dealerTotal + " player= " + playerTotal)
+    }
+    // winning hand.  dealer over 21, player under or equal 21
+    if (dealerTotal > 21 && playerTotal <= 21) {
+        message = "Dealer:  You win!"
+        console.log("Dealer Bust, you win.  dealer = " + dealerTotal + " player = " + playerTotal)
+    }
+     // winning hand.  player has more than dealer but no one has 21 or over
+     if (playerTotal < 21 && dealerTotal < 21) {
+        if (playerTotal > dealerTotal) {
+            message = "Dealer:  You win!"
+            console.log("Your hand beat the dlr.  dealer = " + dealerTotal + " player = " + playerTotal)
+        }
+    }
+
+
+    // losing hand.  player over 21 (regardless of what the dealer has)
+    if (playerTotal > 21) {
+        message = "Dealer:  You lose..."
+        console.log("msg: You bust, you lose " + playerTotal)
+    }
+    
+    // losing hand.  dealer has 21 and player does not have 21
+    if (dealerTotal == 21 && playerTotal !==21 ) {
+        message = "Dealer:  You lose..."
+        console.log("msg: lose dlr 21, plr not 21. dlr = " + dealerTotal + " player= " + playerTotal)
+    }
+    return
 }
-// game disposition -> winner -> losing hand -> tied
-// message system
-// wager button logic
-// action button handling
 
 // This function will determine if the hand (player) is over 21 and has an ace in their hand. If they do, then the ace will be converted from 11 to 1
 function playerAceMath(playerTotal, playerAces) {
@@ -243,6 +272,7 @@ function playerAceMath(playerTotal, playerAces) {
     console.log("Aces. New Player total = " + playerTotal)
     return playerTotal
 }
+
 // This function will determine if the hand (dealer) is over 21 and has an ace in their hand. If they do, then the ace will be converted from 11 to 1
 function dealerAceMath(dealerTotal, dealerAces) {
     while (dealerTotal > 21 && dealerAces > 0) {
