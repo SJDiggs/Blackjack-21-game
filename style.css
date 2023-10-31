@@ -100,4 +100,22 @@ h1 {
     background-color: rgb(175, 100, 9);
     color: rgb(175, 100, 9);
 }
+#player-stats {
+    height: 80px;
+    width: 300px;
+    background-color: darkslategray;
+}
 
+#current-bet {
+    color: darkgray;
+    background-color: darkslategray;
+    font-family: fantasy;
+    text-align: center;
+}
+
+#balance {
+    color: darkgray;
+    background-color: darkslategray;
+    font-family: fantasy;
+    text-align: center;
+}

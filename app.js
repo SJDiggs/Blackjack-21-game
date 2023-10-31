@@ -20,7 +20,7 @@ let dealerAces = 0
 let hiddenCard
 let deck
 
-let message = "Dealer: Welcome to the game..."
+let message = document.getElementById("message-display")
 
 
 // ----- Event Listeners ----- //
@@ -60,7 +60,7 @@ function gameFlow() {
     console.log("Cards shuffled")
     firstHand();
     console.log("First Hand Delt")
-    console.log("Hidden Card = " + hidden)
+    console.log("Hidden Card = " + hiddenCard)
     console.log("Hidden Card Total = " + dealerTotal)
     dealerCard();
     console.log("Dealer Initial Hand dealt")
@@ -69,6 +69,8 @@ function gameFlow() {
     console.log("Player Total = " + playerTotal)
 
 }
+
+
 // This function will create the deck by using nested for loops to create the card value and suit (to be associated with the corresponding .png)  NOTE:  ForEach can be used here - icebox
 function createDeck () {
     let suits = ["S", "H", "C", "D"] //this array identies the cars as a spade, heart, club or diamond
@@ -93,9 +95,9 @@ function shuffleCards() {
 }
 
 function firstHand() {
-    hidden = deck.pop() //grab the last card from the deck and assign it to the dealer hidden card
-    dealerTotal += getCardValue(hidden); //call getCardValue with the hidden card value
-    dealerAces += aceCheck(hidden); //check to see if the dealer has an ace as their hidden card
+    hiddenCard = deck.pop() //grab the last card from the deck and assign it to the dealer hidden card
+    dealerTotal += getCardValue(hiddenCard); //call getCardValue with the hidden card value
+    dealerAces += aceCheck(hiddenCard); //check to see if the dealer has an ace as their hidden card
 
 }
 // This function will determine the value of a card if the card is a non-numerical card (i.e. Ace, King, Queen, Jack) and return the corresponding value of the cards
@@ -123,7 +125,7 @@ function aceCheck(card) {
 
 function dealerCard() {
     console.log("Dealer takes a card")
-    if (dealerTotal < 18) {
+    if (dealerTotal <= 18) {
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "dealer-cards"> assign to cardImage variable
         let card = deck.pop() //grab the last card in the randomized deck
         cardImage.src = "./imgs/cards/" + card + ".png" // create link to the card visual
@@ -162,22 +164,26 @@ function hit () {
             //console.log("Under 21: hit button active")
             return
         }
-        if (playerTotal == 21) {
+        if (playerTotal === 21) {
+            console.log("hit me: player = 21, calling determineWinner()")
             hitMe = false
             document.getElementById("hit").disabled = true  //turn off hit me button
             //message = "Dealer: You have 21..."
+            determineWinner();
             return 
         }
-            if (playerAceMath(playerTotal, playerAces) > 21) { //check player sum and ace count to see if they can reduce the aces from 11 to 1 to get under 21
-                if (playerTotal > 21) {
-                    hitMe = false
-                    document.getElementById("hit").disabled = true 
-                    //console.log("Aces bust handling") -> send to dealer
-                } else {
-                    hitMe = true
-                    document.getElementById("hit").disabled = false
-                }
+        if (playerAceMath(playerTotal, playerAces) > 21) { //check player sum and ace count to see if they can reduce the aces from 11 to 1 to get under 21
+             if (playerTotal > 21) {
+                 hitMe = false
+                 document.getElementById("hit").disabled = true 
+                 console.log("hit. player over 21 calliing determineWinner()")
+                 determineWinner();
+                 return
+            } else {
+                 hitMe = true
+                document.getElementById("hit").disabled = false
             }
+        }
         return
     }
 
@@ -190,7 +196,13 @@ function hit () {
 
 function stay() {
     console.log("Clicked Stay Button")
-    while (dealerTotal < 19) {
+    //disable the hit and stay buttons
+    document.getElementById("hit").disabled = true
+    document.getElementById("stay").disabled = true
+    //reveal hidden dealer card
+    document.getElementById("hidden").src = "./imgs/cards/" + hiddenCard + ".png"
+    //set timer to insert sythetic pause before dealer takes next action
+    while (dealerTotal <= 18) {
         dealerCard();
     }
     console.log("Finished dealer hit logic.  total = " + dealerTotal)
@@ -231,33 +243,46 @@ function determineWinner() {
     console.log("Determining Winner...")
     // tie game
     if (dealerTotal == playerTotal) {
-        message = "Dealer:  It's a tie..."
+        message.innerText = "Dealer:  It's a tie..."
         console.log("msg: Tie Game. dealer= " + dealerTotal + " player= " + playerTotal)
     }
+
+    // winning hand.  player has 21, dealer does not have 21
+    if (playerTotal == 21 && dealerTotal !== 21) {
+        message.innerText = "Dealer:  You got Blackjack!  You win!"
+        console.log("Player Black Jack! " + playerTotal + " dlr: " + dealerTotal)
+    }
+
     // winning hand.  dealer over 21, player under or equal 21
     if (dealerTotal > 21 && playerTotal <= 21) {
-        message = "Dealer:  You win!"
+        message.innerText = "Dealer:  You win!"
         console.log("Dealer Bust, you win.  dealer = " + dealerTotal + " player = " + playerTotal)
     }
      // winning hand.  player has more than dealer but no one has 21 or over
      if (playerTotal < 21 && dealerTotal < 21) {
         if (playerTotal > dealerTotal) {
-            message = "Dealer:  You win!"
+            message.innerText = "Dealer:  You win!"
             console.log("Your hand beat the dlr.  dealer = " + dealerTotal + " player = " + playerTotal)
         }
     }
 
-
     // losing hand.  player over 21 (regardless of what the dealer has)
     if (playerTotal > 21) {
-        message = "Dealer:  You lose..."
+        message.innerText = "Dealer:  You lose..."
         console.log("msg: You bust, you lose " + playerTotal)
     }
     
     // losing hand.  dealer has 21 and player does not have 21
     if (dealerTotal == 21 && playerTotal !==21 ) {
-        message = "Dealer:  You lose..."
+        message.innerText = "Dealer:  You lose..."
         console.log("msg: lose dlr 21, plr not 21. dlr = " + dealerTotal + " player= " + playerTotal)
+    }
+    // losing hand.  dealer has larger hand (but not 21)
+    if (dealerTotal < 21) {
+        if (playerTotal < dealerTotal) {
+            message .innerText= "Dealer: You lose..."
+            console.log("Dealer wins with bigger hand.  Dlr = " + dealerTotal + " plyr = " + playerTotal)
+        }
     }
     return
 }
