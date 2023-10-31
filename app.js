@@ -4,12 +4,13 @@ console.log("JS Loaded")
 
 // ----- Variables ----- //
 
-
 // Card numerical values for the player and dealer
 let playerTotal = 0
 let dealerTotal = 0
-// Account balance total, initialized at $500
+// Account balance  integer to calculate numerical balance
 let accountBalance = 500
+let wagerAmt = 0
+let wagerTotal = 0
 //init value to allow the player or dealer to draw a card if they have less than 21
 let hitMe = true
 let hitdealer = true
@@ -20,8 +21,17 @@ let dealerAces = 0
 let hiddenCard
 let deck
 
-let message = document.getElementById("message-display")
+// ----- Cache the DOM ----- //
 
+let message = document.getElementById("message-display")
+let totBal = document.getElementById("acct-balance")
+    totBal.innerHTML = "500"
+
+let bet20Button = document.getElementById("bet20")
+let bet50Button = document.getElementById("bet50")
+let bet100Button = document.getElementById("bet100")
+
+let hiddenCardFlag = document.getElementById("hidden")
 
 // ----- Event Listeners ----- //
 // "Hit button"
@@ -37,23 +47,31 @@ document.getElementById("deal").addEventListener("click", deal)
 document.getElementById("leave-game").addEventListener("click", leaveGame)
 
 // "Bet 20 button"
-document.getElementById("bet20").addEventListener("click", wager)
+bet20Button.addEventListener("click", function() {
+  placeBet(20);
+});
 
-// "Bet 20 button"
-document.getElementById("bet50").addEventListener("click", wager)
+// "Bet 50 button"
+bet50Button.addEventListener("click", function() {
+    placeBet(50);
+  });
 
 // "Bet 100 button"
-document.getElementById("bet100").addEventListener("click", wager)
+bet100Button.addEventListener("click", function() {
+    placeBet(100);
+  });
 
 // ----- Functions ----- //
+
+//hiddenCardFlag.style.visibility = 'hidden'
 
 // init
 gameFlow()
 
 function gameFlow() {
     console.log("initializing game")
-    //checkBalance();  -->see if the player has enough in their account to play.  If not end game
-    //getWager(); // 1. set up board with no cards present or remove cards if subsewuent hand 2. function for clicking chips to see if the amount wagered is less than or equal the amount they have in their account.  
+    //clearBoard();
+    
     createDeck();
     console.log("Deck created")
     shuffleCards();
@@ -70,9 +88,12 @@ function gameFlow() {
 
 }
 
-
 // This function will create the deck by using nested for loops to create the card value and suit (to be associated with the corresponding .png)  NOTE:  ForEach can be used here - icebox
 function createDeck () {
+
+    //hiddenCardFlag.style.visibility = 'visable' //unhide the hidden card
+    document.getElementById("hidden").style.visibility = "visable"
+
     let suits = ["S", "H", "C", "D"] //this array identies the cars as a spade, heart, club or diamond
     let cardValues = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "K", "Q"] //this array will be used to identify the first element of the card
     deck = []; //initialize the deck array which will contain the fully qualified card ()
@@ -186,12 +207,6 @@ function hit () {
         }
         return
     }
-
-    // Check to see if the player has 21.  If so do not let them hit/disable hit button. Mesasge =  "You already have 21, can't take a hit..."
-    // Else allow player to hit
-    // if player hit puts them over 21 evaluate dealer hand and determine winner or tie
-    // it player hits and they are under 21 let dealer take their turn
-
 }
 
 function stay() {
@@ -220,11 +235,8 @@ function deal() {
 
 function leaveGame() {
     console.log("Clicked Leave Button")
-}
-
-function wager() {
-    console.log("Clicked a wager button")
-    // icebox ---> allow for multiple clicks of wager buttons
+    message.innerText = "Dealer:  Thanks for playing, come back soon!"
+    //disable the buttons
 
 }
 
@@ -306,4 +318,45 @@ function dealerAceMath(dealerTotal, dealerAces) {
     }
     //console.log("Dealer Ace Math.  New Dealer total = " + dealerTotal)
     return dealerTotal
+}
+
+function placeBet(wagerAmt) {
+    console.log("wager")
+    //check to see if the wager amount is higher than the account balance
+    if (wagerAmt > accountBalance) {
+        message.innerText = "Dealer: You do not have enough money in your account for that bet.."
+        //depending on the account balance dont allow player to click a higher wager buttons
+        if (accountBalance < 20) {
+            bet20Button.disabled = true
+            bet50Button.disabled = true
+            bet100Button.disabled = true
+        } else if (accountBalance < 50) {
+            bet50Button.disabled = true
+            bet100Button.disabled = true 
+        }   else if (accountBalance < 100) {
+                bet100Button.disabled = true
+        }
+    } else {  
+        wagerAmount = wagerAmt;
+        //decrease the account balance
+        accountBalance -= wagerAmount;
+        //visually set the account balance to red if the player has under 50 left in their account
+        if (accountBalance <= 50) {
+            totBal.style.fontWeight = "bold"
+            totBal.style.color = "red"
+        } else {
+            totBal.style.fontWeight = "normal"
+            totBal.style.color = "black"
+        }
+        //increase the wager total
+        wagerTotal += wagerAmount
+        //update the UI to show the new balance
+        totBal.innerText = accountBalance
+        
+        //update the UI to show the new wager total
+        document.getElementById('wager-total').textContent = wagerTotal;
+        console.log(`Bet placed: $${wagerAmount}`);
+        console.log(`New bank account balance: $${accountBalance}`);
+        console.log("Total Wagered:" + wagerTotal)
+      }
 }

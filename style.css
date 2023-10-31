@@ -112,6 +112,15 @@ h1 {
     font-family: fantasy;
     text-align: center;
 }
+#current-bet span {
+    color: black;
+    background-color: darkslategray;
+}
+
+#balance span {
+    color: black;
+    background-color: darkslategray;
+}
 
 #balance {
     color: darkgray;
