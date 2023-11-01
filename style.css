@@ -1,5 +1,10 @@
 *{
-    background-color: green;
+    
+    margin: 0;
+    /*--padding: 0; */
+}
+body {
+    background-color: rgb(32, 106, 32);
 }
 
 h1 {
@@ -20,7 +25,6 @@ h1 {
     font-family: fantasy;
     font-size: 20px;
     color: #000000;
-
 }
 
 #player-cards img {
@@ -30,10 +34,12 @@ h1 {
 }
 .button-panel {
     display: flex;
+    bottom: 0;
     border: 0 px;
-    background-color: rgb(175, 100, 9);
     height: 130px;
-    margin: 0 auto;
+    width: 100%;
+    position: absolute;
+    background-color: rgb(175, 100, 9);
 }
 #bet20 {
     border: 0px;
@@ -65,20 +71,33 @@ h1 {
     background-color: rgb(175, 100, 9);
     color: rgb(175, 100, 9);
 }
+#leave-game {
+    background-color: darkgrey;
+    font-family: fantasy;
+    font-size: 20px;
+    height: 90px;
+    width: 100px;
+    position: absolute;
+    right: 2%;
+    bottom: 15%;
+    padding: 10px;
+    border-radius: 10px;
+}
 
 .dealer-hand {
     width: 100%;
-    height: 300px;
+    height: 250px;
     background-color: lightskyblue;
     align-items: center;
 }
 
 .player-hand {
     width: 100%;
-    height: 300px;
+    height: 250px;
     background-color: lightskyblue;
     justify-content: center;
 }
+
 
 .button-panel img {
     height:90px;
@@ -106,9 +125,17 @@ h1 {
     background-color: rgb(175, 100, 9);
     color: rgb(175, 100, 9);
 }
+
 #player-stats {
-    height: 80px;
+    /*float: right;
+    margin: 5px;*/
+    height: 60px;
     width: 300px;
+    padding: 10px;
+    border-radius: 10px;
+    position: absolute;
+    right: 0;
+    bottom: 20%;
     background-color: darkslategray;
 }
 
