@@ -14,6 +14,7 @@ let wagerTotal = 0
 //init value to allow the player or dealer to draw a card if they have less than 21
 let hitMe = true
 let hitdealer = true
+let leftGame = false
 // if a player or dealer has an ace it could be evaluated as either a 1 or a 10 depending on the hand
 let playerAces = 0
 let dealerAces = 0
@@ -31,20 +32,32 @@ let bet20Button = document.getElementById("bet20")
 let bet50Button = document.getElementById("bet50")
 let bet100Button = document.getElementById("bet100")
 
+let hitButton = document.getElementById("hit")
+let dealButton = document.getElementById("deal")
+let stayButton = document.getElementById("stay")
+let leaveButton = document.getElementById("leave-game")
+
+let dealerCardsDiv = document.getElementById("dealer-cards") //test
+let playerCardsDiv = document.getElementById("player-cards") //test
 let hiddenCardFlag = document.getElementById("hidden")
 
 // ----- Event Listeners ----- //
+
 // "Hit button"
-document.getElementById("hit").addEventListener("click", hit)
+hitButton.addEventListener("click", hit)
+//document.getElementById("hit").addEventListener("click", hit)
 
 // "Stay button"
-document.getElementById("stay").addEventListener("click", stay)
+stayButton.addEventListener("click", stay)
+// document.getElementById("stay").addEventListener("click", stay)
 
 // "Deal button"
-document.getElementById("deal").addEventListener("click", deal)
+dealButton.addEventListener("click", deal)
+// document.getElementById("deal").addEventListener("click", deal)
 
 // "Leave button"
-document.getElementById("leave-game").addEventListener("click", leaveGame)
+leaveButton.addEventListener("click", leaveGame)
+//document.getElementById("leave-game").addEventListener("click", leaveGame)
 
 // "Bet 20 button"
 bet20Button.addEventListener("click", function() {
@@ -70,8 +83,9 @@ gameFlow()
 
 function gameFlow() {
     console.log("initializing game")
-    //clearBoard();
-    
+    cleanBoard();
+    console.log("Cleaned the board")
+    //placeBet();
     createDeck();
     console.log("Deck created")
     shuffleCards();
@@ -88,6 +102,15 @@ function gameFlow() {
 
 }
 
+function cleanBoard () {
+    // hide the dealer cards
+    dealerCardsDiv.style.display = "none"
+    // hide the player cards
+    playerCardsDiv .style.display = "none"
+    // clear the message panel
+    message.innerText = ""
+    // pause game wait for user to place their wager
+}
 // This function will create the deck by using nested for loops to create the card value and suit (to be associated with the corresponding .png)  NOTE:  ForEach can be used here - icebox
 function createDeck () {
 
@@ -226,8 +249,23 @@ function stay() {
 
 function deal() {
     console.log("Clicked Deal Button")
-    // only can be invoked if player has 20 or more in their account balance
-    // can only be invoked if player enters a valid wager first
+    if (leftGame)  { //player left game but hit deal button
+
+    } else {
+        // reset the board
+        // wager
+        // 
+
+    }
+    //     bet20Button.disabled = false
+    //     bet50Button.disabled = false
+    //     bet100Button.disabled = true
+
+    // hitButton.disabled = true
+    // dealButton.disabled = false
+    // stayButton.disabled = true
+    // leaveButton.disabled = true
+
     // call gameflow() to start new round
     // deactivate deal button untl end of game
     
@@ -236,6 +274,16 @@ function deal() {
 function leaveGame() {
     console.log("Clicked Leave Button")
     message.innerText = "Dealer:  Thanks for playing, come back soon!"
+    leftGame = true
+   
+    bet20Button.disabled = true
+    bet50Button.disabled = true
+    bet100Button.disabled = true
+
+    hitButton.disabled = true
+    dealButton.disabled = false
+    stayButton.disabled = true
+    leaveButton.disabled = true
     //disable the buttons
 
 }
