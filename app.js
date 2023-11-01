@@ -48,19 +48,15 @@ let betAmount = document.getElementById('wager-total')
 
 // "Hit button"
 hitButton.addEventListener("click", hit)
-//document.getElementById("hit").addEventListener("click", hit)
 
 // "Stay button"
 stayButton.addEventListener("click", stay)
-// document.getElementById("stay").addEventListener("click", stay)
 
 // "Deal button"
 dealButton.addEventListener("click", deal)
-// document.getElementById("deal").addEventListener("click", deal)
 
 // "Leave button"
 leaveButton.addEventListener("click", leaveGame)
-//document.getElementById("leave-game").addEventListener("click", leaveGame)
 
 // "Bet 20 button"
 bet20Button.addEventListener("click", function() {
@@ -82,6 +78,7 @@ bet100Button.addEventListener("click", function() {
 // init
 initGameBoard();
 console.log("post: Board initialized")
+// Main
 gameFlow();
 
 function gameFlow() {
@@ -152,7 +149,6 @@ function initGameBoard () {
     bet50Button.disabled = false
      bet100Button.disabled = false
     
-
     //reset the dealer and player variables
     deck = []
     playerTotal = 0
@@ -168,10 +164,8 @@ function initGameBoard () {
 function prepGameBoard () {
     console.log("prepGameBoard()")
     if (initialGame) {
-        console.log("prepGameBoard() Initial Game")
         // message.innerText = "Dealer: Enter your wager to play..."
     } else {
-        console.log("prepGameBoard() Subsequent Game")
         //remove player cards images from the previous round
         let removePlayerCards = playerCardsDiv.getElementsByTagName("img")
         while (removePlayerCards.length > 0) {
@@ -187,10 +181,9 @@ function prepGameBoard () {
             }
             console.log("prep() Cleared Dealer cards from previous round")
         }
-
-        //hide the dealer cards for the UI
+        //hide the dealer cards for the UI  *** TODO ****
         //document.getElementById("table-screen").style.display = 'none'
-        
+
         if (accountBalance <= 20){
             message.innerText = "Dealer: You do not have enough money to play another round..."
             leaveGame()
@@ -385,19 +378,17 @@ function deal() {
     stayButton.disabled = false
     leaveButton.disabled = true
 
+    // Set initialGame tag to false (not the first game) if or execute the main game flow if this is a subsequent deal
     if (initialGame) {
         initialGame = false
-        console.log("Deal() is initial game")
     } else {
-        console.log("Deal() subsequent game executing cleanBoard()")
         gameFlow ()
 
     }
     return
 }
-
+// This function is invoked when a user clicks the leave button.  It will disable all the buttons, thereby leaving the user with no option but to either refresh the page or navigate to another website
 function leaveGame() {
-    console.log("Clicked Leave Button")
     message.innerText = "Dealer:  Thanks for playing, come back soon!"
     leftGame = true
    
@@ -410,54 +401,46 @@ function leaveGame() {
     stayButton.disabled = true
     leaveButton.disabled = true
 }
-
+// This function calculates who (player or dealer) has the winning hand or if there is a tie game.  It also updates the players account balance accordingly
 function determineWinner() {
-    console.log("Determining Winner...")
-    // tie game
+    // Tie game
     if (dealerTotal == playerTotal) {
         message.innerText = "Dealer: It's a tie... Click Deal to play again."
         accountBalance += wagerTotal
-        console.log("msg: Tie Game. dealer= " + dealerTotal + " player= " + playerTotal)
     }
 
-    // winning hand.  player has 21, dealer does not have 21
+    // Winning hand.  player has 21, dealer does not have 21
     if (playerTotal == 21 && dealerTotal !== 21) {
         message.innerText = "Dealer: You got Blackjack! You win! Click Deal to play again."
-        accountBalance += (wagerTotal * 2)
-        console.log("Player Black Jack! " + playerTotal + " dlr: " + dealerTotal)
+        accountBalance += (wagerTotal * 3)
     }
 
-    // winning hand.  dealer over 21, player under or equal 21
+    // Winning hand.  dealer over 21, player under or equal 21
     if (dealerTotal > 21 && playerTotal <= 21) {
         message.innerText = "Dealer: You win! Click Deal to play again."
-        accountBalance += (wagerTotal * 2)
-        console.log("Dealer Bust: dealer = " + dealerTotal + " player = " + playerTotal)
+        accountBalance += (wagerTotal * 3)
     }
-     // winning hand.  player has more than dealer but no one has 21 or over
+     // Winning hand.  player has more than dealer but no one has 21 or over
      if (playerTotal < 21 && dealerTotal < 21) {
         if (playerTotal > dealerTotal) {
             message.innerText = "Dealer: You win! Click Deal to play again."
-            accountBalance += (wagerTotal * 2)
-            console.log("Your hand beat the dlr. dealer = " + dealerTotal + " player = " + playerTotal)
+            accountBalance += (wagerTotal * 3)
         }
     }
 
-    // losing hand.  player over 21 (regardless of what the dealer has)
+    // Losing hand.  player over 21 (regardless of what the dealer has)
     if (playerTotal > 21) {
         message.innerText = "Dealer: You lose... Click Deal to play again."
-        console.log("msg: You bust " + playerTotal)
     }
     
-    // losing hand.  dealer has 21 and player does not have 21
+    // Losing hand.  dealer has 21 and player does not have 21
     if (dealerTotal == 21 && playerTotal !==21 ) {
         message.innerText = "Dealer:  You lose... Click Deal to play again."
-        console.log("msg: lose dlr 21, plr not 21. dlr = " + dealerTotal + " player= " + playerTotal)
     }
-    // losing hand.  dealer has larger hand (but not 21)
+    // Losing hand.  dealer has larger hand (but not 21)
     if (dealerTotal < 21) {
         if (playerTotal < dealerTotal) {
             message .innerText= "Dealer: You lose... Click Deal to play again."
-            console.log("Dealer has better hand. Dlr = " + dealerTotal + " plyr = " + playerTotal)
         }
     }
     dealButton.disabled = false
@@ -468,7 +451,7 @@ function determineWinner() {
 
 // This function will determine if the hand (player) is over 21 and has an ace in their hand. If they do, then the ace will be converted from 11 to 1
 function playerAceMath(playerTotal, playerAces) {
-    //console.log("playerTotal = " + playerTotal + "  Player Ace Count: " + playerAces)
+    console.log("playerTotal = " + playerTotal + "  Player Ace Count: " + playerAces)
     while (playerTotal > 21 && playerAces > 0) {
         playerTotal -= 10 // subtract the player total by 10
         playerAces -= 1  // remove the ace
@@ -479,6 +462,7 @@ function playerAceMath(playerTotal, playerAces) {
 
 // This function will determine if the hand (dealer) is over 21 and has an ace in their hand. If they do, then the ace will be converted from 11 to 1
 function dealerAceMath(dealerTotal, dealerAces) {
+    console.log("dealerTotal = " + dealerTotal + "  Dlr Ace Count: " + dealerAces)
     while (dealerTotal > 21 && dealerAces > 0) {
         dealerTotal -= 10 // subtract the player total by 10
         dealerAces -= 1  // remove the ace
@@ -488,7 +472,6 @@ function dealerAceMath(dealerTotal, dealerAces) {
 }
 
 function placeBet(wagerAmt) {
-    console.log("placeBet()")
     //check to see if the wager amount is higher than the account balance
     if (wagerAmt > accountBalance) {
         message.innerText = "Dealer: You do not have enough money in your account for that bet.."
@@ -525,8 +508,5 @@ function placeBet(wagerAmt) {
         
         //update the UI to show the new wager total
         document.getElementById('wager-total').textContent = wagerTotal;
-        console.log(`Bet placed: $${wagerAmount}`);
-        console.log(`New bank account balance: $${accountBalance}`);
-        console.log("Total Wagered:" + wagerTotal)
       }
 }
