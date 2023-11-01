@@ -21,6 +21,7 @@ let dealerAces = 0
 // Working storage to track the value of the dealers hidden card
 let hiddenCard
 let deck
+let initialGame = true
 
 // ----- Cache the DOM ----- //
 
@@ -40,6 +41,8 @@ let leaveButton = document.getElementById("leave-game")
 let dealerCardsDiv = document.getElementById("dealer-cards") //test
 let playerCardsDiv = document.getElementById("player-cards") //test
 let hiddenCardFlag = document.getElementById("hidden")
+
+let betAmount = document.getElementById('wager-total')
 
 // ----- Event Listeners ----- //
 
@@ -76,44 +79,175 @@ bet100Button.addEventListener("click", function() {
 
 // ----- Functions ----- //
 
-//hiddenCardFlag.style.visibility = 'hidden'
-
 // init
-gameFlow()
+initGameBoard();
+console.log("post: Cleaned the board")
+gameFlow();
 
 function gameFlow() {
-    console.log("initializing game")
-    cleanBoard();
-    console.log("Cleaned the board")
-    //placeBet();
+    console.log("GAMEFLOW() Initiated")
+    //cleanBoard();
+    // console.log("post: Cleaned the board")
+    prepGameBoard ();
     createDeck();
-    console.log("Deck created")
+    console.log("post: Deck created")
     shuffleCards();
-    console.log("Cards shuffled")
+    console.log("post: Cards shuffled")
     firstHand();
-    console.log("First Hand Delt")
+    console.log("post: First Hand Delt")
     console.log("Hidden Card = " + hiddenCard)
     console.log("Hidden Card Total = " + dealerTotal)
     dealerCard();
-    console.log("Dealer Initial Hand dealt")
+    console.log("post: Dealer Initial Hand dealt")
     initPlayerCards();
-    console.log("Player Initial hand dealt")
+    console.log("post: Player Initial hand dealt")
     console.log("Player Total = " + playerTotal)
 
 }
 
-function cleanBoard () {
-    // hide the dealer cards
-    dealerCardsDiv.style.display = "none"
-    // hide the player cards
-    playerCardsDiv .style.display = "none"
+function initGameBoard () {
+    console.log("cleanBoard()")
+    if (initialGame) {
+        console.log("initGameBoard() Initial Game")
+    // hide the dealer cards, player cards and message area 
+    document.getElementById("table-screen").style.display = 'none'
+    message.visibility = "visible"
     // clear the message panel
-    message.innerText = ""
-    // pause game wait for user to place their wager
+    //message.innerText = "Dealer: Enter your wager to play..."
+    
+    } else {
+        console.log("initGameBoard() Subsequent Game")
+        //remove player cards from the previous round
+        let removePlayerCards = playerCardsDiv.getElementsByTagName("img")
+        while (removePlayerCards.length > 0) {
+            playerCardsDiv.removeChild(removePlayerCards[0])
+            console.log("Cleared Player cards from previous round")
+        }
+        //remove dealer cards except for the hidden card from previous round
+        let removeDealerCards = dealerCardsDiv.getElementsByTagName("img")
+
+        for (let i = removeDealerCards.length - 1; i >= 0; i--) {
+            if (removeDealerCards[i].id !== "hidden") {
+                removeDealerCards[i].parentNode.removeChild(removeDealerCards[i]);
+            }
+        }
+        // while (removeDealerCards.length > 0) {
+        //     dealerCardsDiv.removeChild(removeDealerCards[0])
+        //     console.log("Cleared Dealer cards from previous round")
+        // }
+        if (accountBalance <= 20){
+            message.innerText = "Dealer: You do not have enough money to play another round..."
+            leaveGame()
+        } else {
+            message.innerText = "Dealer: Ante up..."
+        }
+    }
+    
+    //disable all buttons except for wager and leave (player can only start game by placing wager first)
+    hitButton.disabled = true
+    stayButton.disabled = true
+    dealButton.disabled = true
+    leaveButton.diabled = false
+    // conditional logic to set the state of the wager buttons
+    if (accountBalance >= 100) {
+        bet20Button.disabled = false
+        bet50Button.disabled = false
+        bet100Button.disabled = false
+    } else if (accountBalance < 50) {
+        bet20Button.disabled = false
+        bet50Button.diabled = true
+        bet100Button.diabled = true
+    } else {
+        bet20Button.disabled = false
+        bet50Button.diabled = false
+        bet100Button.diabled = true
+    }
+
+    //reset the dealer and player variables
+    deck = []
+    playerTotal = 0
+    dealerTotal = 0
+    wagerAmt = 0
+    wagerTotal = 0
+
+    betAmount.textContent = "000"
+
+    return
+}
+
+function prepGameBoard () {
+    console.log("prepGameBoard()")
+    if (initialGame) {
+        console.log("initGameBoard() Initial Game")
+    // //message.innerText = "Dealer: Enter your wager to play..."
+    } else {
+        console.log("initGameBoard() Subsequent Game")
+        //remove player cards from the previous round
+        let removePlayerCards = playerCardsDiv.getElementsByTagName("img")
+        while (removePlayerCards.length > 0) {
+            playerCardsDiv.removeChild(removePlayerCards[0])
+            console.log("Cleared Player cards from previous round")
+        }
+        //remove dealer cards from previous round
+        let removeDealerCards = dealerCardsDiv.getElementsByTagName("img")
+
+        //-->source stackoverflow
+        for (let i = removeDealerCards.length - 1; i >= 0; i--) {
+            if (removeDealerCards[i].id !== "hidden") {
+                removeDealerCards[i].parentNode.removeChild(removeDealerCards[i]);
+            }
+            console.log("prep() Cleared Dealer cards from previous round")
+        }
+        
+        if (accountBalance <= 20){
+            message.innerText = "Dealer: You do not have enough money to play another round..."
+            leaveGame()
+        } else {
+            message.innerText = "Dealer: Ante up..."
+            hiddenCardFlag. src = "./imgs/cards/BACK.png"
+        }
+        hitButton.disabled = false
+        stayButton.disabled = false
+
+    }
+    
+    //disable all buttons except for wager and leave (player can only start game by placing wager first)
+    dealButton.disabled = true
+    leaveButton.diabled = false
+    // conditional logic to set the state of the wager buttons
+    if (accountBalance >= 100) {
+        bet20Button.disabled = false
+        bet50Button.disabled = false
+        bet100Button.disabled = false
+        hitButton.disabled = false
+        stayButton.disabled = false
+    } else if (accountBalance < 50) {
+        bet20Button.disabled = false
+        bet50Button.diabled = true
+        bet100Button.diabled = true
+        hitButton.disabled = false
+        stayButton.disabled = false
+    } else {
+        bet20Button.disabled = false
+        bet50Button.diabled = false
+        bet100Button.diabled = true
+        hitButton.disabled = false
+        stayButton.disabled = false
+    }
+
+    //reset the dealer and player variables
+    deck = []
+    playerTotal = 0
+    dealerTotal = 0
+    wagerAmt = 0
+    wagerTotal = 0
+
+    betAmount.textContent = "000"
+    return
 }
 // This function will create the deck by using nested for loops to create the card value and suit (to be associated with the corresponding .png)  NOTE:  ForEach can be used here - icebox
 function createDeck () {
-
+    console.log("createDeck()")
     //hiddenCardFlag.style.visibility = 'visable' //unhide the hidden card
     document.getElementById("hidden").style.visibility = "visable"
 
@@ -129,6 +263,7 @@ function createDeck () {
 }
 // This function randomly shuffles the cards from the createDeck function using the Fisher-Yates shuffle method.
 function shuffleCards() {
+    console.log("shuffleCards()")
     for (let i = 0; i < deck.length; i++) { //iterate through the 52 cards (deck.length)
         let c = Math.floor(Math.random() * deck.length) //randomly index the card from the deck created
         let temp = deck[i] //temporarily store the shuffled card
@@ -139,6 +274,7 @@ function shuffleCards() {
 }
 
 function firstHand() {
+    console.log("firstHand()")
     hiddenCard = deck.pop() //grab the last card from the deck and assign it to the dealer hidden card
     dealerTotal += getCardValue(hiddenCard); //call getCardValue with the hidden card value
     dealerAces += aceCheck(hiddenCard); //check to see if the dealer has an ace as their hidden card
@@ -146,6 +282,7 @@ function firstHand() {
 }
 // This function will determine the value of a card if the card is a non-numerical card (i.e. Ace, King, Queen, Jack) and return the corresponding value of the cards
 function getCardValue(card) {
+    console.log("getCardValue()")
     let data = card.split("-") // isolate the card value and suit (2-D --> ["2", "D"])  
     let cardValue = data[0] //grab the first index (i.e. 2-D would grab 2) and assign that to cardValue
     
@@ -160,6 +297,7 @@ function getCardValue(card) {
 }
 
 function aceCheck(card) {
+    console.log("aceCheck()")
     if (card[0] == "A") {
         return 1
     } else {
@@ -168,7 +306,7 @@ function aceCheck(card) {
 }
 
 function dealerCard() {
-    console.log("Dealer takes a card")
+    console.log("dealerCard()")
     if (dealerTotal <= 18) {
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "dealer-cards"> assign to cardImage variable
         let card = deck.pop() //grab the last card in the randomized deck
@@ -176,12 +314,13 @@ function dealerCard() {
         dealerTotal += getCardValue(card); //add the total of the hidden card and the card selected
         dealerAces += aceCheck(card); //check if the card is an Ace
         document.getElementById("dealer-cards").append(cardImage)
-         console.log("Dealer Hits. New total = " + dealerTotal)
+         console.log("Dealer card dealt. Dlr New total = " + dealerTotal)
     }
     return dealerTotal
 }
 // This funciton is used to populate the intial 2 cards for the ployer deck
 function initPlayerCards () {
+    console.log("initPlayerCards()")
     for (let i = 0; i < 2; i++) { //populate the screen with 2 cards using the for loop 
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "player-cards"> assign to cardImage variable
         let card = deck.shift() //grab the first card in the randomized deck
@@ -193,7 +332,7 @@ function initPlayerCards () {
 }
 
 function hit () {
-    console.log("Clicked Hit Button.  hitMe value: " + hitMe)
+    console.log("Clicked Hit Button. hitMe value: " + hitMe)
     if (hitMe) {
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "player-cards"> assign to cardImage variable
         let card = deck.shift() //grab the first card in the randomized deck
@@ -233,7 +372,7 @@ function hit () {
 }
 
 function stay() {
-    console.log("Clicked Stay Button")
+    console.log("........stay()...........")
     //disable the hit and stay buttons
     document.getElementById("hit").disabled = true
     document.getElementById("stay").disabled = true
@@ -249,26 +388,30 @@ function stay() {
 
 function deal() {
     console.log("Clicked Deal Button")
-    if (leftGame)  { //player left game but hit deal button
+    // show a fresh screen
+    document.getElementById("table-screen").style.display = "block"
 
+    message.innerText = "Dealer:  Would you like to Hit or Stay..."
+
+    // set button states
+    bet20Button.disabled = true
+    bet50Button.disabled = true
+    bet100Button.disabled = true
+
+    hitButton.disabled = false
+    dealButton.disabled = true
+    stayButton.disabled = false
+    leaveButton.disabled = true
+
+    if (initialGame) {
+        initialGame = false
+        console.log("Deal() is initial game")
     } else {
-        // reset the board
-        // wager
-        // 
+        console.log("Deal() subsequent game executing cleanBoard()")
+        gameFlow ()
 
     }
-    //     bet20Button.disabled = false
-    //     bet50Button.disabled = false
-    //     bet100Button.disabled = true
-
-    // hitButton.disabled = true
-    // dealButton.disabled = false
-    // stayButton.disabled = true
-    // leaveButton.disabled = true
-
-    // call gameflow() to start new round
-    // deactivate deal button untl end of game
-    
+    return
 }
 
 function leaveGame() {
@@ -284,66 +427,59 @@ function leaveGame() {
     dealButton.disabled = false
     stayButton.disabled = true
     leaveButton.disabled = true
-    //disable the buttons
-
-}
-
-function acctBalance() {
-    //determine if balance is being reduced via wager
-    //determine if balance is being incremented due to win
-    //determine if balance is restored due to tie
-}
-
-function messageSystem() {
-    //display appropriate message in the message-display to player
-
 }
 
 function determineWinner() {
     console.log("Determining Winner...")
     // tie game
     if (dealerTotal == playerTotal) {
-        message.innerText = "Dealer:  It's a tie..."
+        message.innerText = "Dealer: It's a tie... Click Deal to play again."
+        accountBalance += wagerTotal
         console.log("msg: Tie Game. dealer= " + dealerTotal + " player= " + playerTotal)
     }
 
     // winning hand.  player has 21, dealer does not have 21
     if (playerTotal == 21 && dealerTotal !== 21) {
-        message.innerText = "Dealer:  You got Blackjack!  You win!"
+        message.innerText = "Dealer: You got Blackjack! You win! Click Deal to play again."
+        accountBalance += (wagerTotal * 2)
         console.log("Player Black Jack! " + playerTotal + " dlr: " + dealerTotal)
     }
 
     // winning hand.  dealer over 21, player under or equal 21
     if (dealerTotal > 21 && playerTotal <= 21) {
-        message.innerText = "Dealer:  You win!"
-        console.log("Dealer Bust, you win.  dealer = " + dealerTotal + " player = " + playerTotal)
+        message.innerText = "Dealer: You win! Click Deal to play again."
+        accountBalance += (wagerTotal * 2)
+        console.log("Dealer Bust: dealer = " + dealerTotal + " player = " + playerTotal)
     }
      // winning hand.  player has more than dealer but no one has 21 or over
      if (playerTotal < 21 && dealerTotal < 21) {
         if (playerTotal > dealerTotal) {
-            message.innerText = "Dealer:  You win!"
-            console.log("Your hand beat the dlr.  dealer = " + dealerTotal + " player = " + playerTotal)
+            message.innerText = "Dealer: You win! Click Deal to play again."
+            accountBalance += (wagerTotal * 2)
+            console.log("Your hand beat the dlr. dealer = " + dealerTotal + " player = " + playerTotal)
         }
     }
 
     // losing hand.  player over 21 (regardless of what the dealer has)
     if (playerTotal > 21) {
-        message.innerText = "Dealer:  You lose..."
-        console.log("msg: You bust, you lose " + playerTotal)
+        message.innerText = "Dealer: You lose... Click Deal to play again."
+        console.log("msg: You bust " + playerTotal)
     }
     
     // losing hand.  dealer has 21 and player does not have 21
     if (dealerTotal == 21 && playerTotal !==21 ) {
-        message.innerText = "Dealer:  You lose..."
+        message.innerText = "Dealer:  You lose... Click Deal to play again."
         console.log("msg: lose dlr 21, plr not 21. dlr = " + dealerTotal + " player= " + playerTotal)
     }
     // losing hand.  dealer has larger hand (but not 21)
     if (dealerTotal < 21) {
         if (playerTotal < dealerTotal) {
-            message .innerText= "Dealer: You lose..."
-            console.log("Dealer wins with bigger hand.  Dlr = " + dealerTotal + " plyr = " + playerTotal)
+            message .innerText= "Dealer: You lose... Click Deal to play again."
+            console.log("Dealer has better hand. Dlr = " + dealerTotal + " plyr = " + playerTotal)
         }
     }
+    dealButton.disabled = false
+    totBal.innerText = accountBalance
     return
 }
 
@@ -369,7 +505,7 @@ function dealerAceMath(dealerTotal, dealerAces) {
 }
 
 function placeBet(wagerAmt) {
-    console.log("wager")
+    console.log("placeBet()")
     //check to see if the wager amount is higher than the account balance
     if (wagerAmt > accountBalance) {
         message.innerText = "Dealer: You do not have enough money in your account for that bet.."
@@ -400,6 +536,9 @@ function placeBet(wagerAmt) {
         wagerTotal += wagerAmount
         //update the UI to show the new balance
         totBal.innerText = accountBalance
+
+        //enable deal button
+        dealButton.disabled = false
         
         //update the UI to show the new wager total
         document.getElementById('wager-total').textContent = wagerTotal;

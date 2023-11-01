@@ -9,26 +9,27 @@
 </head>
 <body>
     <h1>BlackJack</h1>
-    <section id = "dealer-controller" class = "dealer-hand">
-        <div id = "dealer-cards">
-             <img id = "hidden" src="./imgs/cards/BACK.png">
+    <div id = "table-screen" class = "screen">
+        <section id = "dealer-controller" class = "dealer-hand">
+            <div id = "dealer-cards">
+                <img id = "hidden" src="./imgs/cards/BACK.png">
      <!-- <img src="./imgs/cards/K-S.png">  -->   
-        </div>
-    </section>
+            </div>
+        </section>
 
-    <section id = "display" class = "message-panel">
-        <p id = "message-display">
-            "Display Messages here"
-        </p>
-    </section>  
+        <section id = "display" class = "message-panel">
+            <p id = "message-display">
+            "Dealer: Ante up to play, then click Deal"
+            </p>
+        </section>  
 
-    <section id = "player-controller" class = "player-hand">
-        <div id = "player-cards">
+        <section id = "player-controller" class = "player-hand">
+            <div id = "player-cards">
      <!--       <img src="./imgs/cards/5-D.png">
         <img src="./imgs/cards/10-S.png"> -->
-        </div>
-    </section>
-
+            </div>
+        </section>
+    </div>
     <section id = "stats" class = "status-panel">
         <div id = "player-stats">
             <p id = "current-bet"> Current Bet  &nbsp &nbsp &nbsp <span id="wager-total">000</span></p>
