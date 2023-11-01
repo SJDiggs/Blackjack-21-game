@@ -16,6 +16,9 @@ h1 {
     display: none;
 }
 #dealer-cards img {
+    /*display: flex;
+    align-items: center;
+    justify-content: center; */
     height: 160px;
     width: 105px;
     margin: 5px;

@@ -81,13 +81,11 @@ bet100Button.addEventListener("click", function() {
 
 // init
 initGameBoard();
-console.log("post: Cleaned the board")
+console.log("post: Board initialized")
 gameFlow();
 
 function gameFlow() {
     console.log("GAMEFLOW() Initiated")
-    //cleanBoard();
-    // console.log("post: Cleaned the board")
     prepGameBoard ();
     createDeck();
     console.log("post: Deck created")
@@ -106,62 +104,54 @@ function gameFlow() {
 }
 
 function initGameBoard () {
-    console.log("cleanBoard()")
-    if (initialGame) {
-        console.log("initGameBoard() Initial Game")
-    // hide the dealer cards, player cards and message area 
-    document.getElementById("table-screen").style.display = 'none'
-    message.visibility = "visible"
-    // clear the message panel
-    //message.innerText = "Dealer: Enter your wager to play..."
+    console.log("initGameBoard()")
+    // if (initialGame) {
+    //     console.log("initGameBoard() Initial Game")
+    // // hide the dealer cards, player cards and message area 
+    // document.getElementById("table-screen").style.display = 'none'
+    // message.visibility = "visible"
+    // // clear the message panel
+    // //message.innerText = "Dealer: Enter your wager to play..."
     
-    } else {
-        console.log("initGameBoard() Subsequent Game")
-        //remove player cards from the previous round
-        let removePlayerCards = playerCardsDiv.getElementsByTagName("img")
-        while (removePlayerCards.length > 0) {
-            playerCardsDiv.removeChild(removePlayerCards[0])
-            console.log("Cleared Player cards from previous round")
-        }
-        //remove dealer cards except for the hidden card from previous round
-        let removeDealerCards = dealerCardsDiv.getElementsByTagName("img")
+    // } else {
+    //     console.log("initGameBoard() Subsequent Game")
+    //     //remove player cards from the previous round
+    //     let removePlayerCards = playerCardsDiv.getElementsByTagName("img")
+    //     while (removePlayerCards.length > 0) {
+    //         playerCardsDiv.removeChild(removePlayerCards[0])
+    //         console.log("Cleared Player cards from previous round")
+    //     }
+    //     //remove dealer cards except for the hidden card from previous round
+    //     let removeDealerCards = dealerCardsDiv.getElementsByTagName("img")
 
-        for (let i = removeDealerCards.length - 1; i >= 0; i--) {
-            if (removeDealerCards[i].id !== "hidden") {
-                removeDealerCards[i].parentNode.removeChild(removeDealerCards[i]);
-            }
-        }
-        // while (removeDealerCards.length > 0) {
-        //     dealerCardsDiv.removeChild(removeDealerCards[0])
-        //     console.log("Cleared Dealer cards from previous round")
-        // }
-        if (accountBalance <= 20){
-            message.innerText = "Dealer: You do not have enough money to play another round..."
-            leaveGame()
-        } else {
-            message.innerText = "Dealer: Ante up..."
-        }
-    }
+    //     for (let i = removeDealerCards.length - 1; i >= 0; i--) {
+    //         if (removeDealerCards[i].id !== "hidden") {
+    //             removeDealerCards[i].parentNode.removeChild(removeDealerCards[i]);
+    //         }
+    //     }
+    //     // while (removeDealerCards.length > 0) {
+    //     //     dealerCardsDiv.removeChild(removeDealerCards[0])
+    //     //     console.log("Cleared Dealer cards from previous round")
+    //     // }
+    //     if (accountBalance <= 20){
+    //         message.innerText = "Dealer: You do not have enough money to play another round..."
+    //         leaveGame()
+    //     } else {
+    //         message.innerText = "Dealer: Ante up..."
+    //     }
+    // }
     
-    //disable all buttons except for wager and leave (player can only start game by placing wager first)
+    // //disable all buttons except for wager and leave (player can only start game by placing wager first)
     hitButton.disabled = true
     stayButton.disabled = true
     dealButton.disabled = true
     leaveButton.diabled = false
     // conditional logic to set the state of the wager buttons
-    if (accountBalance >= 100) {
-        bet20Button.disabled = false
-        bet50Button.disabled = false
-        bet100Button.disabled = false
-    } else if (accountBalance < 50) {
-        bet20Button.disabled = false
-        bet50Button.diabled = true
-        bet100Button.diabled = true
-    } else {
-        bet20Button.disabled = false
-        bet50Button.diabled = false
-        bet100Button.diabled = true
-    }
+    
+    bet20Button.disabled = false
+    bet50Button.disabled = false
+     bet100Button.disabled = false
+    
 
     //reset the dealer and player variables
     deck = []
@@ -178,19 +168,18 @@ function initGameBoard () {
 function prepGameBoard () {
     console.log("prepGameBoard()")
     if (initialGame) {
-        console.log("initGameBoard() Initial Game")
-    // //message.innerText = "Dealer: Enter your wager to play..."
+        console.log("prepGameBoard() Initial Game")
+        // message.innerText = "Dealer: Enter your wager to play..."
     } else {
-        console.log("initGameBoard() Subsequent Game")
-        //remove player cards from the previous round
+        console.log("prepGameBoard() Subsequent Game")
+        //remove player cards images from the previous round
         let removePlayerCards = playerCardsDiv.getElementsByTagName("img")
         while (removePlayerCards.length > 0) {
             playerCardsDiv.removeChild(removePlayerCards[0])
             console.log("Cleared Player cards from previous round")
         }
-        //remove dealer cards from previous round
+        //remove dealer cards images from previous round (keep the hidden card)
         let removeDealerCards = dealerCardsDiv.getElementsByTagName("img")
-
         //-->source stackoverflow
         for (let i = removeDealerCards.length - 1; i >= 0; i--) {
             if (removeDealerCards[i].id !== "hidden") {
@@ -198,43 +187,36 @@ function prepGameBoard () {
             }
             console.log("prep() Cleared Dealer cards from previous round")
         }
+
+        //hide the dealer cards for the UI
+        //document.getElementById("table-screen").style.display = 'none'
         
         if (accountBalance <= 20){
             message.innerText = "Dealer: You do not have enough money to play another round..."
             leaveGame()
         } else {
             message.innerText = "Dealer: Ante up..."
-            hiddenCardFlag. src = "./imgs/cards/BACK.png"
+            hiddenCardFlag. src = "./imgs/cards/BACK.png" //reset the hidden card image
         }
-        hitButton.disabled = false
-        stayButton.disabled = false
-
     }
-    
     //disable all buttons except for wager and leave (player can only start game by placing wager first)
     dealButton.disabled = true
-    leaveButton.diabled = false
-    // conditional logic to set the state of the wager buttons
+    leaveButton.disabled = false
+
+    // conditional logic to set the state of the wager buttons on subsequent hands
     if (accountBalance >= 100) {
         bet20Button.disabled = false
         bet50Button.disabled = false
         bet100Button.disabled = false
-        hitButton.disabled = false
-        stayButton.disabled = false
     } else if (accountBalance < 50) {
         bet20Button.disabled = false
         bet50Button.diabled = true
         bet100Button.diabled = true
-        hitButton.disabled = false
-        stayButton.disabled = false
     } else {
         bet20Button.disabled = false
         bet50Button.diabled = false
         bet100Button.diabled = true
-        hitButton.disabled = false
-        stayButton.disabled = false
     }
-
     //reset the dealer and player variables
     deck = []
     playerTotal = 0
@@ -479,6 +461,7 @@ function determineWinner() {
         }
     }
     dealButton.disabled = false
+    leaveButton.disabled = false
     totBal.innerText = accountBalance
     return
 }
