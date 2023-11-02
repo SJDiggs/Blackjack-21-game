@@ -14,7 +14,7 @@ The payout for a winning hand is 3 times your wager (if you bet $50, you will wi
     * HTML
     * CSS
 
-# Getting Started
+# Game Play
 
     * Upon launching you will be presented with the Blackjack table overlay, which consists of the main table (empty) and a user panel.
     * You start the game with $500 in your account.  
