@@ -7,7 +7,17 @@ There is also a wager system which allows you to place a bet by selecting multip
 The payout for a winning hand is 3 times your wager (if you bet $50, you will win $150)
 
 # Screenshots
+ - Landing Page
+ ![](./imgs/screenshots/BlackJack%20Initial%20Screen.png)
 
+ - Winning!
+ ![](./imgs/screenshots/BlackJack_Win.png)
+
+ - Not Winning :-/
+ ![](./imgs/screenshots/BlackJack_Lose.png)
+
+ - A Tie...
+ ![](./imgs/screenshots/BlackJack_Tie.png)
 
 # Technologies
     * Javascript

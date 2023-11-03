@@ -13,8 +13,8 @@ let wagerAmt = 0
 let wagerTotal = 0
 //init value to allow the player or dealer to draw a card if they have less than 21
 let hitMe = true
-let hitdealer = true
 let leftGame = false
+let wagerPlaced = false
 // if a player or dealer has an ace it could be evaluated as either a 1 or a 10 depending on the hand
 let playerAces = 0
 let dealerAces = 0
@@ -43,6 +43,9 @@ let playerCardsDiv = document.getElementById("player-cards") //test
 let hiddenCardFlag = document.getElementById("hidden")
 
 let betAmount = document.getElementById('wager-total')
+
+let dealerSum = document.getElementById("dealer-sum")
+let playerSum = document.getElementById("player-sum")
 
 // ----- Event Listeners ----- //
 
@@ -77,67 +80,30 @@ bet100Button.addEventListener("click", function() {
 
 // init
 initGameBoard();
-console.log("post: Board initialized")
+
 // Main
 gameFlow();
 
 function gameFlow() {
     console.log("GAMEFLOW() Initiated")
-    prepGameBoard ();
+    prepGameBoard();
     createDeck();
-    console.log("post: Deck created")
     shuffleCards();
-    console.log("post: Cards shuffled")
     firstHand();
-    console.log("post: First Hand Delt")
-    console.log("Hidden Card = " + hiddenCard)
-    console.log("Hidden Card Total = " + dealerTotal)
     dealerCard();
-    console.log("post: Dealer Initial Hand dealt")
     initPlayerCards();
-    console.log("post: Player Initial hand dealt")
-    console.log("Player Total = " + playerTotal)
-
 }
 
 function initGameBoard () {
-    console.log("initGameBoard()")
+    console.log("initIN() HB Status:" + hitButton.disabled)
     // if (initialGame) {
     //     console.log("initGameBoard() Initial Game")
     // // hide the dealer cards, player cards and message area 
     // document.getElementById("table-screen").style.display = 'none'
     // message.visibility = "visible"
-    // // clear the message panel
-    // //message.innerText = "Dealer: Enter your wager to play..."
-    
-    // } else {
-    //     console.log("initGameBoard() Subsequent Game")
-    //     //remove player cards from the previous round
-    //     let removePlayerCards = playerCardsDiv.getElementsByTagName("img")
-    //     while (removePlayerCards.length > 0) {
-    //         playerCardsDiv.removeChild(removePlayerCards[0])
-    //         console.log("Cleared Player cards from previous round")
-    //     }
-    //     //remove dealer cards except for the hidden card from previous round
-    //     let removeDealerCards = dealerCardsDiv.getElementsByTagName("img")
-
-    //     for (let i = removeDealerCards.length - 1; i >= 0; i--) {
-    //         if (removeDealerCards[i].id !== "hidden") {
-    //             removeDealerCards[i].parentNode.removeChild(removeDealerCards[i]);
-    //         }
-    //     }
-    //     // while (removeDealerCards.length > 0) {
-    //     //     dealerCardsDiv.removeChild(removeDealerCards[0])
-    //     //     console.log("Cleared Dealer cards from previous round")
-    //     // }
-    //     if (accountBalance <= 20){
-    //         message.innerText = "Dealer: You do not have enough money to play another round..."
-    //         leaveGame()
-    //     } else {
-    //         message.innerText = "Dealer: Ante up..."
-    //     }
-    // }
-    
+    //message.innerText = "Dealer: Enter your wager to play..."
+    // document.getElementById("dealer-cards").style.display = 'none'
+    // document.getElementById("player-cards").style.display = 'none'
     // //disable all buttons except for wager and leave (player can only start game by placing wager first)
     hitButton.disabled = true
     stayButton.disabled = true
@@ -145,9 +111,10 @@ function initGameBoard () {
     leaveButton.diabled = false
     // conditional logic to set the state of the wager buttons
     
+    wagerPlaced = false
     bet20Button.disabled = false
     bet50Button.disabled = false
-     bet100Button.disabled = false
+    bet100Button.disabled = false
     
     //reset the dealer and player variables
     deck = []
@@ -157,15 +124,16 @@ function initGameBoard () {
     wagerTotal = 0
 
     betAmount.textContent = "000"
-
+    console.log("initOUT() HB Status: " + hitButton.disabled)
     return
 }
 
 function prepGameBoard () {
-    console.log("prepGameBoard()")
+    console.log("prepIN() HB Status: " + hitButton.disabled + " 1st Game: " + initialGame)
     if (initialGame) {
         // message.innerText = "Dealer: Enter your wager to play..."
     } else {
+        console.log("*********** SUBSEQUENT ROUND *************")
         //remove player cards images from the previous round
         let removePlayerCards = playerCardsDiv.getElementsByTagName("img")
         while (removePlayerCards.length > 0) {
@@ -181,31 +149,45 @@ function prepGameBoard () {
             }
             console.log("prep() Cleared Dealer cards from previous round")
         }
-        //hide the dealer cards for the UI  *** TODO ****
-        //document.getElementById("table-screen").style.display = 'none'
 
         if (accountBalance <= 20){
             message.innerText = "Dealer: You do not have enough money to play another round..."
             leaveGame()
         } else {
-            message.innerText = "Dealer: Ante up..."
+            message.innerText = "Dealer: Ante up to play..."
             hiddenCardFlag. src = "./imgs/cards/BACK.png" //reset the hidden card image
+            //***TEST*** 
+            hitButton.disabled = true
+            stayButton.disabled = true
+            dealButton.disabled = true
+            //***TEST***
         }
     }
+
     //disable all buttons except for wager and leave (player can only start game by placing wager first)
     dealButton.disabled = true
     leaveButton.disabled = false
 
-    // conditional logic to set the state of the wager buttons on subsequent hands
+    // conditional logic to set the state of the wager buttons based on player funds available
+    if (wagerPlaced = false) {
+        message.innerText = "Dealer: Place your bet to play..."
+        dealButton.disabled = true
+        hitButton.disabled = true
+        stayButton.disabled = true
+    }
+
     if (accountBalance >= 100) {
+        totBal.style.color = "black"
         bet20Button.disabled = false
         bet50Button.disabled = false
         bet100Button.disabled = false
     } else if (accountBalance < 50) {
+        totBal.style.color = "red"
         bet20Button.disabled = false
         bet50Button.diabled = true
         bet100Button.diabled = true
     } else {
+        totBal.style.color = "red"
         bet20Button.disabled = false
         bet50Button.diabled = false
         bet100Button.diabled = true
@@ -216,13 +198,16 @@ function prepGameBoard () {
     dealerTotal = 0
     wagerAmt = 0
     wagerTotal = 0
-
+    dealerSum.innerText = ""
+    playerSum.innerText = ""
     betAmount.textContent = "000"
+    hitMe = true
+    console.log("prepOUT() HB Status: " + hitButton.disabled + " 1st Game: " + initialGame)
     return
 }
 // This function will create the deck by using nested for loops to create the card value and suit (to be associated with the corresponding .png)  NOTE:  ForEach can be used here - icebox
 function createDeck () {
-    console.log("createDeck()")
+    console.log("createDeckIN() HB Status: " + hitButton.disabled)
     //hiddenCardFlag.style.visibility = 'visable' //unhide the hidden card
     document.getElementById("hidden").style.visibility = "visable"
 
@@ -235,10 +220,11 @@ function createDeck () {
             deck.push(cardValues[j] + "-" + suits[i]) //build naming convention used in imgs/cards (ex 2-D = 2 of diamonds png)
         }
     }
+    console.log("createDeckOUT() HB Status: " + hitButton.disabled)
 }
 // This function randomly shuffles the cards from the createDeck function using the Fisher-Yates shuffle method.
 function shuffleCards() {
-    console.log("shuffleCards()")
+    console.log("shuffleCardsIN() HB Status: " + hitButton.disabled)
     for (let i = 0; i < deck.length; i++) { //iterate through the 52 cards (deck.length)
         let c = Math.floor(Math.random() * deck.length) //randomly index the card from the deck created
         let temp = deck[i] //temporarily store the shuffled card
@@ -246,18 +232,19 @@ function shuffleCards() {
             deck[c] = temp
     //console.log(temp)
     }
+    console.log("shuffleCardsOUT() HB Status: " + hitButton.disabled)
 }
 
 function firstHand() {
-    console.log("firstHand()")
+    console.log("firstHandIN() HB Status: " + hitButton.disabled)
     hiddenCard = deck.pop() //grab the last card from the deck and assign it to the dealer hidden card
     dealerTotal += getCardValue(hiddenCard); //call getCardValue with the hidden card value
     dealerAces += aceCheck(hiddenCard); //check to see if the dealer has an ace as their hidden card
-
+    console.log("firstHandOUT() HB Status: " + hitButton.disabled)
 }
 // This function will determine the value of a card if the card is a non-numerical card (i.e. Ace, King, Queen, Jack) and return the corresponding value of the cards
 function getCardValue(card) {
-    console.log("getCardValue()")
+    console.log("getCardValueIN() HB Status: " + hitButton.disabled)
     let data = card.split("-") // isolate the card value and suit (2-D --> ["2", "D"])  
     let cardValue = data[0] //grab the first index (i.e. 2-D would grab 2) and assign that to cardValue
     
@@ -267,104 +254,112 @@ function getCardValue(card) {
     if (cardValue == "A") { //convert an ace to 11
         return 11
     }
-
+    console.log("getCardValueOUT() HB Status: " + hitButton.disabled)
     return parseInt(cardValue) //return the numerical value of the card for all non-face-cards or aces by parsing the deck string and returning the corresponding integer
 }
 
 function aceCheck(card) {
-    console.log("aceCheck()")
+    console.log("aceCheckIN() HB Status: " + hitButton.disabled)
     if (card[0] == "A") {
         return 1
     } else {
         return 0
     }
+    console.log("aceCheckOUT() HB Status: " + hitButton.disabled)
 }
 
 function dealerCard() {
-    console.log("dealerCard()")
+    console.log("dealerCardIN() HB Status: " + hitButton.disabled)
     if (dealerTotal <= 18) {
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "dealer-cards"> assign to cardImage variable
         let card = deck.pop() //grab the last card in the randomized deck
         cardImage.src = "./imgs/cards/" + card + ".png" // create link to the card visual
         dealerTotal += getCardValue(card); //add the total of the hidden card and the card selected
-        dealerAces += aceCheck(card); //check if the card is an Ace
+        dealerAces += aceCheck(card); //check if a card is an Ace
         document.getElementById("dealer-cards").append(cardImage)
          console.log("Dealer card dealt. Dlr New total = " + dealerTotal)
     }
+    console.log("dealerCardOUT() HB Status: " + hitButton.disabled)
     return dealerTotal
 }
 // This funciton is used to populate the intial 2 cards for the ployer deck
 function initPlayerCards () {
-    console.log("initPlayerCards()")
+        console.log("initPlayerCards IN() HB Status: " + hitButton.disabled)
     for (let i = 0; i < 2; i++) { //populate the screen with 2 cards using the for loop 
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "player-cards"> assign to cardImage variable
         let card = deck.shift() //grab the first card in the randomized deck
         cardImage.src = "./imgs/cards/" + card + ".png" // create link to the card visual
         playerTotal += getCardValue(card); //add the total of the card and the card selected
-        playerAces += aceCheck(card); //check if the card is an Ace
+        playerAces += aceCheck(card); //check if the card is an Ace, if so add it to the ace count
         document.getElementById("player-cards").append(cardImage) //target the player-cards ID and append the card image for the associated card
+        console.log("initPlayerCards OUT() HB Status: " + hitButton.disabled)
     }
 }
 
 function hit () {
-    console.log("Clicked Hit Button. hitMe value: " + hitMe)
+    console.log("hit IN() HB Status: " + hitButton.disabled + " hitMe = " +hitMe)
     if (hitMe) {
         let cardImage = document.createElement("img") // create a new image tag for the  <div id = "player-cards"> assign to cardImage variable
         let card = deck.shift() //grab the first card in the randomized deck
         cardImage.src = "./imgs/cards/" + card + ".png" 
         playerTotal += getCardValue(card);
-        playerAces += aceCheck(card); //check if the card is an Ace
+        console.log("hit() invoke aceCheck() playerAces = " + playerAces + "card = " + card)
+        playerAces += aceCheck(card); //check if the card is an Ace, if so add it to the ace count
         document.getElementById("player-cards").append(cardImage) 
-        console.log("New total after hit: " + playerTotal)
+
         if (playerTotal < 21) {
-            hitMe = true //needs to be evaluated to see if ace can be changed to 1
-            document.getElementById("hit").disabled = false
-            //console.log("Under 21: hit button active")
+            hitMe = true //needs to be evaluated
+            hitButton.disabled = false
+            console.log("hit plyr < 21 HB Status: " + hitButton.disabled + " hitMe = " +hitMe)
             return
         }
         if (playerTotal === 21) {
-            console.log("hit me: player = 21, calling determineWinner()")
             hitMe = false
-            document.getElementById("hit").disabled = true  //turn off hit me button
-            //message = "Dealer: You have 21..."
+            hitButton.disabled = true 
+            console.log("hit plyr = 21 HB Status: " + hitButton.disabled + " hitMe = " +hitMe)
             determineWinner();
             return 
         }
         if (playerAceMath(playerTotal, playerAces) > 21) { //check player sum and ace count to see if they can reduce the aces from 11 to 1 to get under 21
              if (playerTotal > 21) {
                  hitMe = false
-                 document.getElementById("hit").disabled = true 
-                 console.log("hit. player over 21 calliing determineWinner()")
+                 hitButton.disabled = true 
+                 console.log("hit plyr > 21 HB Status: " + hitButton.disabled + " hitMe = " +hitMe)
                  determineWinner();
                  return
             } else {
                  hitMe = true
-                document.getElementById("hit").disabled = false
+                 hitButton.disabled = false
+                 console.log("hit plyr < 21 post ace math HB Status: " + hitButton.disabled + " hitMe = " +hitMe)
             }
         }
         return
     }
+    console.log("hit OUT HB Status: " + hitButton.disabled + " hitMe = " +hitMe)
 }
 
 function stay() {
-    console.log("........stay()...........")
+    console.log("stay IN HB Status: " + hitButton.disabled + " hitMe = " +hitMe)
     //disable the hit and stay buttons
-    document.getElementById("hit").disabled = true
+    hitButton.disabled = true
     document.getElementById("stay").disabled = true
     //reveal hidden dealer card
     document.getElementById("hidden").src = "./imgs/cards/" + hiddenCard + ".png"
-    //set timer to insert sythetic pause before dealer takes next action
+    //ICEBOX:  set timer to insert sythetic pause before dealer takes next action
     while (dealerTotal <= 18) {
         dealerCard();
     }
     console.log("Finished dealer hit logic.  total = " + dealerTotal)
+    console.log("stay OUT HB Status: " + hitButton.disabled + " hitMe = " +hitMe)
     determineWinner(); 
 }
 
 function deal() {
-    console.log("Clicked Deal Button")
+    console.log("deal IN HB Status: " + hitButton.disabled)
     // show a fresh screen
+    
     document.getElementById("table-screen").style.display = "block"
+    document.getElementById("player-screen").style.display = "block"
 
     message.innerText = "Dealer:  Would you like to Hit or Stay..."
 
@@ -385,10 +380,12 @@ function deal() {
         gameFlow ()
 
     }
+    console.log("deal OUT HB Status: " + hitButton.disabled)
     return
 }
 // This function is invoked when a user clicks the leave button.  It will disable all the buttons, thereby leaving the user with no option but to either refresh the page or navigate to another website
 function leaveGame() {
+    console.log("leave IN HB Status: " + hitButton.disabled)
     message.innerText = "Dealer:  Thanks for playing, come back soon!"
     leftGame = true
    
@@ -400,9 +397,11 @@ function leaveGame() {
     dealButton.disabled = false
     stayButton.disabled = true
     leaveButton.disabled = true
+    console.log("leave OUT HB Status: " + hitButton.disabled)
 }
 // This function calculates who (player or dealer) has the winning hand or if there is a tie game.  It also updates the players account balance accordingly
 function determineWinner() {
+    console.log("detWinner IN HB Status: " + hitButton.disabled)
     // Tie game
     if (dealerTotal == playerTotal) {
         message.innerText = "Dealer: It's a tie... Click Deal to play again."
@@ -443,12 +442,27 @@ function determineWinner() {
             message .innerText= "Dealer: You lose... Click Deal to play again."
         }
     }
+
+    // set button states
     dealButton.disabled = false
     leaveButton.disabled = false
+    bet100Button.disabled = true
+    bet20Button.diabled = true
+    bet50Button.disabled = true
+
+    //display end of hand totals
     totBal.innerText = accountBalance
+    if (accountBalance >= 100) {
+        totBal.style.color = "black"
+    } else {
+        totBal.style.color ="red"
+    }
+    dealerSum.innerText = dealerTotal
+    playerSum.innerText = playerTotal
+
+    console.log("detWinner OUT HB Status: " + hitButton.disabled)
     return
 }
-
 // This function will determine if the hand (player) is over 21 and has an ace in their hand. If they do, then the ace will be converted from 11 to 1
 function playerAceMath(playerTotal, playerAces) {
     console.log("playerTotal = " + playerTotal + "  Player Ace Count: " + playerAces)
@@ -456,7 +470,7 @@ function playerAceMath(playerTotal, playerAces) {
         playerTotal -= 10 // subtract the player total by 10
         playerAces -= 1  // remove the ace
     }
-    console.log("Aces. New Player total = " + playerTotal)
+    console.log("Aces Math completed. Player total = " + playerTotal)
     return playerTotal
 }
 
@@ -467,13 +481,14 @@ function dealerAceMath(dealerTotal, dealerAces) {
         dealerTotal -= 10 // subtract the player total by 10
         dealerAces -= 1  // remove the ace
     }
-    //console.log("Dealer Ace Math.  New Dealer total = " + dealerTotal)
     return dealerTotal
 }
 
 function placeBet(wagerAmt) {
+    console.log("placebet IN HB Status: " + hitButton.disabled)
     //check to see if the wager amount is higher than the account balance
     if (wagerAmt > accountBalance) {
+        wagerPlaced = false
         message.innerText = "Dealer: You do not have enough money in your account for that bet.."
         //depending on the account balance dont allow player to click a higher wager buttons
         if (accountBalance < 20) {
@@ -487,7 +502,10 @@ function placeBet(wagerAmt) {
                 bet100Button.disabled = true
         }
     } else {  
+        wagerPlaced = true
         wagerAmount = wagerAmt;
+        hitButton.disabled = false
+        stayButton.disabled = false
         //decrease the account balance
         accountBalance -= wagerAmount;
         //visually set the account balance to red if the player has under 50 left in their account
@@ -509,4 +527,5 @@ function placeBet(wagerAmt) {
         //update the UI to show the new wager total
         document.getElementById('wager-total').textContent = wagerTotal;
       }
+      console.log("placebet OUT HB Status: " + hitButton.disabled)
 }

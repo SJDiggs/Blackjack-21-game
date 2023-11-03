@@ -10,19 +10,21 @@
 <body>
     <h1>BlackJack</h1>
     <div id = "table-screen" class = "screen">
+        <h3>Dealer: <span id = "dealer-sum"></span></h3>
         <section id = "dealer-controller" class = "dealer-hand">
             <div id = "dealer-cards">
                 <img id = "hidden" src="./imgs/cards/BACK.png">
      <!-- <img src="./imgs/cards/K-S.png">  -->   
             </div>
         </section>
-
+    </div>
         <section id = "display" class = "message-panel">
             <p id = "message-display">
-            "Dealer: Ante up to play, then click Deal"
+            "Dealer: Place your bet to play, then click Deal"
             </p>
         </section>  
-
+    <div id = "player-screen" class = "screen">
+        <h3>Player: <span id = "player-sum"></span></h3>
         <section id = "player-controller" class = "player-hand">
             <div id = "player-cards">
      <!--       <img src="./imgs/cards/5-D.png">
