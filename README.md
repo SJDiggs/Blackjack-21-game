@@ -44,7 +44,7 @@ The payout for a winning hand is 3 times your wager (if you bet $50, you will wi
 
 
     - Launch game:
-        ![] (https://sjdiggs.github.io/Blackjack-21-game/)
+        ![](https://sjdiggs.github.io/Blackjack-21-game/)
     
     - github repo:
         https://github.com/SJDiggs/Blackjack-21-game
