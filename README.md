@@ -43,3 +43,7 @@ The payout for a winning hand is 3 times your wager (if you bet $50, you will wi
     * Responsive 
     * Don't show cards immediately on subsequent deals
 
+# Known Issues
+    * On subsewuent hands the Deal button is not disabled after placing a bet
+    * Ace Math Logic sometimes does not provide the expected outcome
+    * Should not be allowed to hit once you go over 21
